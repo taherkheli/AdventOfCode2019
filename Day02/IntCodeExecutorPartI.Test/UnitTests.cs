@@ -1,7 +1,6 @@
-using Alarm;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace _1202ProgramAlarm.Test
+namespace IntCodeExecutorPartI.Test
 {
   [TestClass]
   public class UnitTests

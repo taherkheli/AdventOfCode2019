@@ -1,4 +1,5 @@
-﻿namespace Alarm
+﻿
+namespace IntCodeExecutorPartII
 {
   public enum Opcodes
   {

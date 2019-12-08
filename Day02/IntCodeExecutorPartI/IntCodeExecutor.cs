@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Alarm
+namespace IntCodeExecutorPartI
 {
   public class IntCodeExecutor
   {
@@ -12,6 +12,8 @@ namespace Alarm
       _intCode = intCode;
       _iPtr = 0;
     }
+
+    public int[] IntCode { get => _intCode; set => _intCode = value; }
 
     public int[] Execute()
     {

@@ -1,20 +1,17 @@
 ﻿using System;
 using System.IO;
 
-namespace Alarm
+namespace IntCodeExecutorPartI
 {
   class Program
   {
     static void Main()
     {
       string path = "input.txt";
-
       IntCodeExecutor intCodeExecutor = new IntCodeExecutor(LoadInput(path));
-
-      foreach (var item in intCodeExecutor.Execute())      
-        Console.WriteLine(item);   
-
-      Console.WriteLine("\nIntcode Program executed successfully!\n");
+      intCodeExecutor.Execute();   
+      Console.WriteLine("\nThe item in position 0 after intcode execution was: {0}", intCodeExecutor.IntCode[0]); 
+      Console.WriteLine("\nIntcode executed successfully!\n");
     }
 
     private static int[] LoadInput(string path)
