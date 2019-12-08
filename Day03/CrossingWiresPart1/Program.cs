@@ -17,10 +17,20 @@ namespace CrossingWires
 
       wire1.Move(LoadInput(strings[0]));
       wire2.Move(LoadInput(strings[1].Substring(1)));  //get rid of '\n' in second string
+      
+      int start = 0;
+      int step = 100;
+      var intersections = new List<Point>();
 
-      var crosses = wire1.FindAllCrossingsWith(wire2);
+      while (intersections.Count < 1)
+      {
+        var w1 = wire1.FindPointsInBand(start, start+step);
+        var w2 = wire2.FindPointsInBand(start, start+step);
+        intersections = Wire.FindAllCrossings(w1, w2);
+        start += step;
+      }
 
-      Console.WriteLine(CalculateManhattanDistance(crosses));
+      Console.WriteLine(CalculateManhattanDistance(intersections));
     }
 
     private static List<Movement> LoadInput(string path)
@@ -70,7 +80,6 @@ namespace CrossingWires
         distances[i] = Math.Abs(points[i].X) + Math.Abs(points[i].Y);
 
       Array.Sort(distances);
-
       return distances[0];
     }
   }

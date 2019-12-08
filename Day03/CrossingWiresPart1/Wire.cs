@@ -28,26 +28,16 @@ namespace CrossingWires
         TrackWire(movement);
     }
 
-    public bool HasCrossed(Point p)
-    {
-      return _points.Contains(p) ? true : false;
-    }
-
-    public List<Point> FindAllCrossingsWith(Wire otherWire)
+    public static List<Point> FindAllCrossings(List<Point> w1, List<Point> w2)
     {
       var result = new List<Point>();
 
-      foreach (var p in _points)
+      foreach (var p in w1)
       {
-        if (otherWire.HasCrossed(p))
+        if (w2.Contains(p))
           result.Add(p);
-
-        //TODO: added this just to get to to some result. need soem performance optimization it seems ;) but at least I got the answer right        
-        if (result.Count > 10)
-          break;
       }
 
-      result.Remove(new Point() { X = 0, Y = 0 });   //ignore origin
       return result;
     }
 
@@ -92,5 +82,21 @@ namespace CrossingWires
       }
 
     }
+
+    public List<Point> FindPointsInBand(int min, int max)
+    {
+      var result = new List<Point>();
+
+      foreach (var p in _points)
+      {
+        if ((Math.Abs(p.X) > min) && (Math.Abs(p.X) <= max))             //x is in range
+        {             
+          if (Math.Abs(p.Y) <= max)           //y is also in range     
+            result.Add(p);
+        }
+      }
+
+      return result;
+    }
   }
-}
+}  
