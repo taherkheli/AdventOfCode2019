@@ -22,10 +22,36 @@ namespace CrossingWires
     public Point Head { get => _head; }
     public List<Point> Points { get => _points; }
 
+    public List<Point> FindPointsInBand(int min, int max)
+    {
+      var result = new List<Point>();
+
+      foreach (var p in _points)
+      {
+        if ((Math.Abs(p.X) > min) && (Math.Abs(p.X) <= max))             //x is in range
+        {
+          if (Math.Abs(p.Y) <= max)           //y is also in range     
+            result.Add(p);
+        }
+      }
+
+      return result;
+    }
+
     public void Move(List<Movement> movements)
     {
       foreach (var movement in movements)
         TrackWire(movement);
+    }
+
+    //return -1 if item not found
+    public int StepsTakenToReach(Point p)
+    {
+      //int index = myList.FindIndex(a => a.Prop == oProp);
+
+      int index = _points.FindIndex(t =>((t.X == p.X) && (t.Y == p.Y)));
+
+      return index;
     }
 
     public static List<Point> FindAllCrossings(List<Point> w1, List<Point> w2)
@@ -81,22 +107,6 @@ namespace CrossingWires
           break;
       }
 
-    }
-
-    public List<Point> FindPointsInBand(int min, int max)
-    {
-      var result = new List<Point>();
-
-      foreach (var p in _points)
-      {
-        if ((Math.Abs(p.X) > min) && (Math.Abs(p.X) <= max))             //x is in range
-        {             
-          if (Math.Abs(p.Y) <= max)           //y is also in range     
-            result.Add(p);
-        }
-      }
-
-      return result;
     }
   }
 }  
