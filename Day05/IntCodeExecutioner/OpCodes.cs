@@ -2,10 +2,10 @@
 {
   public enum Opcodes
   {
-    Add = 1,
-    Multiply = 2,
-    Read = 3,
-    Write = 4,
-    Exit = 99
+    Add,
+    Multiply,
+    Read,
+    Write,
+    Exit
   }
 }
