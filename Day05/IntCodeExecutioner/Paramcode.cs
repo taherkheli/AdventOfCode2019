@@ -2,7 +2,7 @@
 {
   public enum ParamCode
   {
-    Val,
-    Ref
+    Ref,
+    Val
   }
 }

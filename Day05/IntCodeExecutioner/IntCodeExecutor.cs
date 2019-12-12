@@ -1,7 +1,5 @@
 ﻿using IntCodeExecutioner;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IntCodeExecutor
 {
@@ -34,7 +32,7 @@ namespace IntCodeExecutor
 
       while (nextInstruction.OpCode != Opcodes.Exit)
       {
-        switch (DecodeInstruction().OpCode)
+        switch (nextInstruction.OpCode)
         {
           case Opcodes.Add:
             Add(nextInstruction);
@@ -70,38 +68,50 @@ namespace IntCodeExecutor
     {
       Instruction instruction = new Instruction();
 
-      if (_intCode[_iPtr] == 99)
+      char[] charCode = new char[5];  
+      charCode.Initialize();   //default is \0
+      var chars = Convert.ToString(_intCode[_iPtr], 10).ToCharArray();
+
+      for (int i = 0; i < charCode.Length; i++)
+      {
+        if (i < chars.Length)
+          charCode[i] = (chars[(chars.Length - (i + 1))]);   //no need to reverse order now 
+        else
+          break;
+      }
+
+      if ((charCode[0] == '9') && (charCode[1] == '9'))
         instruction.OpCode = Opcodes.Exit;
       else
-      {
-        //var chars = Convert.ToString(_intCode[_iPtr], 2).ToCharArray();
-        //int[] bits = new int[16];
-        //bits.Initialize();
-        //for (int i = 0; i < bits.Length; i++)
-        //{
-        //  if (i < chars.Length)
-        //    bits[i] = (int)Char.GetNumericValue(chars[(chars.Length - (i + 1))]);   //no need to reverse order now 
-        //  else
-        //    break;
-        //}
-
-        switch (_intCode[_iPtr])
+      { 
+        switch (charCode[0])
         {
-          case 1:
+          case '1':
             instruction.OpCode = Opcodes.Add;
             break;
-          case 2:
+          case '2':
             instruction.OpCode = Opcodes.Multiply;
             break;
-          case 3:
+          case '3':
             instruction.OpCode = Opcodes.Read;
             break;
-          case 4:
+          case '4':
             instruction.OpCode = Opcodes.Write;
             break;
           default:
             break;
         }
+
+        instruction.p1ParamCode = ParamCode.Ref;
+        instruction.p2ParamCode = ParamCode.Ref;
+        instruction.p3ParamCode = ParamCode.Ref;
+                
+        if (charCode[2] == '1')
+          instruction.p1ParamCode = ParamCode.Val;
+        if (charCode[3] == '1')
+          instruction.p2ParamCode = ParamCode.Val;
+        if (charCode[4] == '1')
+          instruction.p3ParamCode = ParamCode.Val;
       }
 
       return instruction;
@@ -109,23 +119,63 @@ namespace IntCodeExecutor
 
     private void Add(Instruction i)
     {
-      _intCode[_intCode[_iPtr + 3]] = _intCode[_intCode[_iPtr + 1]] + _intCode[_intCode[_iPtr + 2]];
+      int p1, p2;
+
+      if (i.p1ParamCode == ParamCode.Ref)
+        p1 = _intCode[_intCode[_iPtr + 1]];
+      else
+        p1 = _intCode[_iPtr + 1];
+
+      if (i.p2ParamCode == ParamCode.Ref)
+        p2 = _intCode[_intCode[_iPtr + 2]];
+      else
+        p2 = _intCode[_iPtr + 2];
+      
+      if (i.p3ParamCode == ParamCode.Ref)
+        _intCode[_intCode[_iPtr + 3]] = p1 + p2;
+      else
+        _intCode[_iPtr + 3] = p1 + p2;
     }
 
     private void Multiply(Instruction i)
     {
-      _intCode[_intCode[_iPtr + 3]] = _intCode[_intCode[_iPtr + 1]] * _intCode[_intCode[_iPtr + 2]];
+      int p1, p2;
+
+      if (i.p1ParamCode == ParamCode.Ref)
+        p1 = _intCode[_intCode[_iPtr + 1]];
+      else
+        p1 = _intCode[_iPtr + 1];
+
+      if (i.p2ParamCode == ParamCode.Ref)
+        p2 = _intCode[_intCode[_iPtr + 2]];
+      else
+        p2 = _intCode[_iPtr + 2];
+
+      if (i.p3ParamCode == ParamCode.Ref)
+        _intCode[_intCode[_iPtr + 3]] = p1 * p2;
+      else
+        _intCode[_iPtr + 3] = p1 * p2;
     }
 
     private void Read(Instruction i)
     {
+      //Parameters that an instruction writes to will never be in immediate mode. 
+      //probably means 1p will always be ref type here
+
       Console.Write("\n please enter a diagnostic code and press enter:  ");
       _intCode[_intCode[_iPtr + 1]] = int.Parse(Console.ReadLine());
     }
 
     private void Write(Instruction i)
     {
-      Console.WriteLine("\n value :  {0}", _intCode[_intCode[_iPtr + 1]]);      
+      int p1;
+
+      if (i.p1ParamCode == ParamCode.Ref)
+        p1 = _intCode[_intCode[_iPtr + 1]];
+      else
+        p1 = _intCode[_iPtr + 1];
+
+      Console.WriteLine("\n value :  {0}", p1);      
     }
   }
 }
