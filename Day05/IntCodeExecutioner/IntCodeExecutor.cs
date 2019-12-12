@@ -17,7 +17,7 @@ namespace IntCodeExecutor
       _memory.Initialize();
       Array.Copy(intCode, _memory, intCode.Length);
       _intCode = intCode;
-      _iPtr = 0;;
+      _iPtr = 0; ;
     }
 
     public void Initialize()
@@ -36,24 +36,28 @@ namespace IntCodeExecutor
         {
           case Opcodes.Add:
             Add(nextInstruction);
-            _iPtr += 4;
             break;
-
           case Opcodes.Multiply:
             Multiply(nextInstruction);
-            _iPtr += 4;
             break;
-
           case Opcodes.Read:
             Read(nextInstruction);
-            _iPtr += 2;
             break;
-
           case Opcodes.Write:
             Write(nextInstruction);
-            _iPtr += 2;
             break;
-
+          case Opcodes.JumpIfTrue:
+            JumpIfTrue(nextInstruction);
+            break;
+          case Opcodes.JumpIfFalse:
+            JumpIfFalse(nextInstruction);
+            break;
+          case Opcodes.LessThan:
+            LessThan(nextInstruction);
+            break;
+          case Opcodes.Equals:
+            Equals(nextInstruction);
+            break;
           default:
             throw new InvalidOperationException("Unknown Opcode");
         }
@@ -68,7 +72,7 @@ namespace IntCodeExecutor
     {
       Instruction instruction = new Instruction();
 
-      char[] charCode = new char[5];  
+      char[] charCode = new char[5];
       charCode.Initialize();   //default is \0
       var chars = Convert.ToString(_intCode[_iPtr], 10).ToCharArray();
 
@@ -83,7 +87,7 @@ namespace IntCodeExecutor
       if ((charCode[0] == '9') && (charCode[1] == '9'))
         instruction.OpCode = Opcodes.Exit;
       else
-      { 
+      {
         switch (charCode[0])
         {
           case '1':
@@ -98,6 +102,18 @@ namespace IntCodeExecutor
           case '4':
             instruction.OpCode = Opcodes.Write;
             break;
+          case '5':
+            instruction.OpCode = Opcodes.JumpIfTrue;
+            break;
+          case '6':
+            instruction.OpCode = Opcodes.JumpIfFalse;
+            break;
+          case '7':
+            instruction.OpCode = Opcodes.LessThan;
+            break;
+          case '8':
+            instruction.OpCode = Opcodes.Equals;
+            break;
           default:
             break;
         }
@@ -105,7 +121,7 @@ namespace IntCodeExecutor
         instruction.p1ParamCode = ParamCode.Ref;
         instruction.p2ParamCode = ParamCode.Ref;
         instruction.p3ParamCode = ParamCode.Ref;
-                
+
         if (charCode[2] == '1')
           instruction.p1ParamCode = ParamCode.Val;
         if (charCode[3] == '1')
@@ -120,41 +136,31 @@ namespace IntCodeExecutor
     private void Add(Instruction i)
     {
       int p1, p2;
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;
 
-      if (i.p1ParamCode == ParamCode.Ref)
-        p1 = _intCode[_intCode[_iPtr + 1]];
-      else
-        p1 = _intCode[_iPtr + 1];
-
-      if (i.p2ParamCode == ParamCode.Ref)
-        p2 = _intCode[_intCode[_iPtr + 2]];
-      else
-        p2 = _intCode[_iPtr + 2];
-      
       if (i.p3ParamCode == ParamCode.Ref)
         _intCode[_intCode[_iPtr + 3]] = p1 + p2;
       else
         _intCode[_iPtr + 3] = p1 + p2;
+
+      _iPtr += 4;
     }
 
     private void Multiply(Instruction i)
     {
       int p1, p2;
-
-      if (i.p1ParamCode == ParamCode.Ref)
-        p1 = _intCode[_intCode[_iPtr + 1]];
-      else
-        p1 = _intCode[_iPtr + 1];
-
-      if (i.p2ParamCode == ParamCode.Ref)
-        p2 = _intCode[_intCode[_iPtr + 2]];
-      else
-        p2 = _intCode[_iPtr + 2];
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;
 
       if (i.p3ParamCode == ParamCode.Ref)
         _intCode[_intCode[_iPtr + 3]] = p1 * p2;
       else
         _intCode[_iPtr + 3] = p1 * p2;
+
+      _iPtr += 4;
     }
 
     private void Read(Instruction i)
@@ -164,6 +170,8 @@ namespace IntCodeExecutor
 
       Console.Write("\n please enter a diagnostic code and press enter:  ");
       _intCode[_intCode[_iPtr + 1]] = int.Parse(Console.ReadLine());
+
+      _iPtr += 2;
     }
 
     private void Write(Instruction i)
@@ -175,7 +183,82 @@ namespace IntCodeExecutor
       else
         p1 = _intCode[_iPtr + 1];
 
-      Console.WriteLine("\n value :  {0}", p1);      
+      Console.WriteLine("\n value :  {0}", p1);
+
+      _iPtr += 2;
+    }
+
+    private void JumpIfTrue(Instruction i)
+    {
+      int p1, p2;
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;
+
+      if (p1 != 0)
+        _iPtr = p2;
+      else
+        _iPtr += 3;   //do nothing  
+    }
+
+    private void JumpIfFalse(Instruction i)
+    {
+      int p1, p2;
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;
+
+      if (p1 == 0)
+        _iPtr = p2;
+      else
+        _iPtr += 3;   //do nothing
+    }
+
+    private void LessThan(Instruction i)
+    {
+      int p1, p2;
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;           
+      int val = ((p1<p2)? 1: 0);      
+      if (i.p3ParamCode == ParamCode.Ref)
+        _intCode[_intCode[_iPtr + 3]] = val;
+      else
+        _intCode[_iPtr + 3] = val;
+
+      _iPtr += 4;
+    }
+
+    private void Equals(Instruction i)
+    {
+      int p1, p2;
+      Tuple<int, int> t = GetParameters(i);
+      p1 = t.Item1;
+      p2 = t.Item2;
+      int val = ((p1 == p2) ? 1 : 0);
+      if (i.p3ParamCode == ParamCode.Ref)
+        _intCode[_intCode[_iPtr + 3]] = val;
+      else
+        _intCode[_iPtr + 3] = val;
+
+      _iPtr += 4;
+    }
+
+    private Tuple<int, int> GetParameters(Instruction i)
+    {
+      int p1, p2;
+      
+      if (i.p1ParamCode == ParamCode.Ref)
+        p1 = _intCode[_intCode[_iPtr + 1]];
+      else
+        p1 = _intCode[_iPtr + 1];
+      
+      if (i.p2ParamCode == ParamCode.Ref)
+        p2 = _intCode[_intCode[_iPtr + 2]];
+      else
+        p2 = _intCode[_iPtr + 2];
+
+      return Tuple.Create(p1, p2);
     }
   }
 }

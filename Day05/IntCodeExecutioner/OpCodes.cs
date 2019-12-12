@@ -6,6 +6,10 @@
     Multiply,
     Read,
     Write,
+    JumpIfTrue,
+    JumpIfFalse,
+    LessThan,
+    Equals,
     Exit
   }
 }
