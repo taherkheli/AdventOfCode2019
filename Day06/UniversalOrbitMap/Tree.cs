@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace UniversalOrbitMap
@@ -9,7 +10,7 @@ namespace UniversalOrbitMap
   {
     private List<Node> _nodes;
     private List<Node> _leaves;
-    
+
     public Tree(string path)
     {
       _nodes = new List<Node>();
@@ -70,6 +71,14 @@ namespace UniversalOrbitMap
       return sum;
     }
 
+    public int GetOrbitalTransfersToSanta()
+    {
+      Node you = _nodes.Find(t => t.Name == "YOU");
+      Node santa = _nodes.Find(t => t.Name == "SAN");
+      Node commonNode = GetFirstCommonAncestor(you, santa);
+      return (GetAncestorsUpto(santa, commonNode).Count + GetAncestorsUpto(you, commonNode).Count);
+    }
+
     private void ShedLeaves()
     {
       List<Node> newLeaves = new List<Node>();
@@ -83,7 +92,7 @@ namespace UniversalOrbitMap
           newLeaves = null;
           break;
         }
-        else 
+        else
         {
           p.Children.RemoveAll(t => t.Name == n.Name);
           if ((!(newLeaves.Contains(p))) && (p.Children.Count == 0))
@@ -100,22 +109,50 @@ namespace UniversalOrbitMap
       int sum = 0;
 
       foreach (var n in _leaves)
-        sum += CountAncestors(n);
+        sum += GetAncestors(n).Count;
 
       return sum;
     }
 
-    private int CountAncestors(Node n)
+    private List<Node> GetAncestors(Node n)
     {
-      int count = 0;
+      List<Node> result = new List<Node>();
 
       while (n.Parent != null)
       {
+        result.Add(n.Parent);
         n = n.Parent;
-        count++;
       }
 
-      return count;
+      return result;
     }
+
+    private Node GetFirstCommonAncestor(Node n1, Node n2)
+    {
+      List<Node> n1_ancestors = GetAncestors(n1);
+      List<Node> n2_ancestors = GetAncestors(n2);
+
+      return n1_ancestors.Intersect(n2_ancestors).First<Node>();
+    }
+
+    private List<Node> GetAncestorsUpto(Node n, Node target)
+    {
+      List<Node> result = new List<Node>();
+      List<Node> n_ancestors = GetAncestors(n);
+
+      //check if target can be hit
+      if (n_ancestors.Contains(target))
+      {
+        while (n.Parent != target)
+        {
+          result.Add(n.Parent);
+          n = n.Parent;
+        }
+      }
+      else
+        result = null;
+
+      return result;
+    }    
   }
 }
