@@ -6,6 +6,14 @@
     private int _columns;
     private int[,] _data;
 
+    public Layer(int rows, int columns, int[] input)
+    {
+      _rows = rows;
+      _columns = columns;
+      _data = new int[_rows, columns];
+      FillData(input);
+    }
+
     public Layer(int rows, int columns)
     {
       _rows = rows;
@@ -13,11 +21,12 @@
       _data = new int[_rows, columns];
     }
 
-    public int Zeroes { 
-      get 
-      { 
-        return CountOccurences(0); 
-      }  
+    public int Zeroes
+    {
+      get
+      {
+        return CountOccurences(0);
+      }
     }
 
     public int Ones
@@ -36,7 +45,7 @@
       }
     }
 
-    public void FillData(int[] input)
+    private void FillData(int[] input)
     {
       if (input.Length == (_rows * _columns))
       {

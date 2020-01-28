@@ -9,14 +9,12 @@ namespace Driver
   {
     static void Main()
     {
-      int rows = 6;
-      int columns = 25;
+      int rows = 6;         //tall
+      int columns = 25;     //wide
 
       string path = "input.txt";
       int[] input = LoadInput(path);
-
-      var image = new Image(rows, columns);
-      image.FillData(input);
+      var image = new Image(rows, columns, input);
       var layer = GetLayerWithLeastZeroes(image);
       Console.WriteLine("\nThe product of digit 1 occurences and digit 2 occurences on the layer with the fewest zeroes is : {0}", layer.Ones * layer.Twos);
     }

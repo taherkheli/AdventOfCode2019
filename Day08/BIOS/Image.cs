@@ -1,58 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BIOS
+﻿namespace BIOS
 {
   public class Image
   {
     private readonly int _rows;
     private readonly int _columns;
-    private readonly List<Layer> _layers;
+    private Layer[] _layers;
 
-    public Image(int rows, int columns)
+    public Image(int rows, int columns, int[] input)
     {
       _rows = rows;
       _columns = columns;
-      _layers = new List<Layer>();
+      FillData(input);
     }
 
-    public List<Layer> Layers { get => _layers; }
+    public Layer[] Layers { get => _layers; }
 
-    public void FillData(int[] input)
+    private void FillData(int[] input)
     {
-      foreach (var chunk in GetChunks(input))
-      {
-        var layer = new Layer(_rows, _columns);
-        layer.FillData(chunk);
-        _layers.Add(layer);
-      }
-    }
-
-    private List<int[]> GetChunks(int[] input)
-    {
-      List<int[]> result = null;
       int size = _rows * _columns;
 
-      if (input.Length % size == 0)   // must be a multiple of the size of a layer 
+      if (input.Length % size == 0)   // input length must be a multiple of the layer size 
       {
         int numLayers = input.Length / size;
-        result = new List<int[]>();
+        _layers = new Layer[numLayers];
 
         for (int i = 0; i < numLayers; i++)
-        {
-          var x = new int[size];
-          int index = 0;
-          for (int j = size * i; j < size * (i + 1); j++)
-          {
-            x[index] = input[j];
-            index++;
-          }
-
-          result.Add(x);
-        }
+          _layers[i] = new Layer(_rows, _columns, GetFragment(input, i, size));
       }
+    }
+
+    private int[] GetFragment(int[] input, int index, int size)
+    {
+      var result = new int[size];
+
+      for (int i = 0; i < size; i++)
+        result[i] = input[index * size + i];
 
       return result;
     }
-  }  
+  }
 }
