@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
-namespace IntCodeExecutor
+namespace IntCodeExecutorNs
 {
   class Program
   {

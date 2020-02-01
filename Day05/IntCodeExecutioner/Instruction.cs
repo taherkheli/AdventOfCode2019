@@ -1,12 +1,10 @@
-﻿using IntCodeExecutor;
-
-namespace IntCodeExecutioner
+﻿namespace IntCodeExecutorNs
 {
   public struct Instruction
   {
     public Opcodes OpCode;
-    public ParamCode p1ParamCode;
-    public ParamCode p2ParamCode;
-    public ParamCode p3ParamCode;       
+    public ParamMode p1ParamMode;
+    public ParamMode p2ParamMode;
+    public ParamMode p3ParamMode;       
   }
 }
