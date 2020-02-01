@@ -36,6 +36,7 @@ namespace IntCodeExecutorPartI
         _iPtr += 4;
       }
 
+      _iPtr = 0;  //reset _iPtr
       return _intCode;
     }
     

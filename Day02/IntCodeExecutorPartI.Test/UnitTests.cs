@@ -9,7 +9,7 @@ namespace IntCodeExecutorPartI.Test
     public void Test1()
     {
       int[] input = { 1, 0, 0, 0, 99 };
-      int [] expected = { 2, 0, 0, 0, 99 };
+      int[] expected = { 2, 0, 0, 0, 99 };
       IntCodeExecutor intCodeExecutor = new IntCodeExecutor(input);
 
       var actual = intCodeExecutor.Execute();
