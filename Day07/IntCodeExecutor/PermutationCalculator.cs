@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IntCodeExecutioner
+namespace IntCodeExecutorNs
 {
   public static class PermutationCalculator
   {

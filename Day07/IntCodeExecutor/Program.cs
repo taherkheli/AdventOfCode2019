@@ -1,16 +1,16 @@
-﻿using IntCodeExecutioner;
-using System;
+﻿using System;
 using System.IO;
 
-namespace IntCodeExecutor
+namespace IntCodeExecutorNs
 {
   class Program
   {
     static void Main()
     {
+
       string path = "input.txt";
       int[] program = LoadInput(path);
-      int[] sequence = new int[5] { 0, 1, 2, 3, 4 };
+      int[] sequence = new int[5] { 1, 0, 4, 3, 2 };
       int highest = -1;
       var permutations = PermutationCalculator.GetCombinations(sequence);
 
@@ -18,26 +18,10 @@ namespace IntCodeExecutor
       {
         var temp = Calculate(program, permutation.ToArray());
         if (temp > highest)
-          highest = temp;   
+          highest = temp;
       }
 
       Console.WriteLine("\n strongest signal value :  {0}", highest);
-    }
-
-    private static int[] LoadInput(string path)
-    {
-      int[] result;
-
-      using (StreamReader file = new StreamReader(path))
-      {
-        string[] strings = file.ReadToEnd().Split(',');
-        result = new int[strings.Length];
-
-        for (int i = 0; i < result.Length; i++)
-          result[i] = int.Parse(strings[i]);
-      }
-
-      return result;
     }
 
     private static int Calculate(int[] program, int[] pattern)
@@ -54,6 +38,18 @@ namespace IntCodeExecutor
       amp5.Execute();
 
       return (int)amp5.Output;
-    } 
+    }
+
+    private static int[] LoadInput(string path)
+    {
+      StreamReader file = new StreamReader(path);
+      string[] strings = file.ReadToEnd().Split(',');
+      int[] result = new int[strings.Length];
+
+      for (int i = 0; i < result.Length; i++)
+        result[i] = int.Parse(strings[i]);
+
+      return result;
+    }
   }
 }
