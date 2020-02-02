@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IntCodeExecutorNs;
 
-namespace IntCodeExecutorTest
+namespace InstDecoderTest
 {
   [TestClass]
   public class UnitTest
