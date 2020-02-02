@@ -1,4 +1,4 @@
-﻿namespace IntCodeExecutorNs
+﻿namespace IntCodeExecutorPartII
 {
   public class Helpers
   {

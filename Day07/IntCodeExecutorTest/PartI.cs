@@ -1,4 +1,4 @@
-﻿using IntCodeExecutorNs;
+﻿using IntCodeExecutorPartII;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Part1Test

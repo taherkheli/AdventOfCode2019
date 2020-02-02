@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IntCodeExecutorNs;
+using IntCodeExecutorPartII;
 
 namespace InstDecoderTest
 {

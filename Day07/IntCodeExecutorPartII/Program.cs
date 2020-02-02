@@ -2,20 +2,18 @@
 using System.IO;
 
 namespace IntCodeExecutorPartII
-{
+  {
   class Program
   {
     static void Main()
     {
       string path = "input.txt";
       int[] program = LoadInput(path);
-      int[] sequence = new int[5] { 1, 0, 4, 3, 2 };
-      int highest = -1;
-      highest = Helpers.GetHighest(program, sequence);
-
+      int[] sequence = new int[5] { 9, 8, 7, 6, 5 };
+      int highest = Helpers.GetHighest(program, sequence);
       Console.WriteLine("\n strongest signal value :  {0}", highest);
     }
-    
+
     private static int[] LoadInput(string path)
     {
       StreamReader file = new StreamReader(path);

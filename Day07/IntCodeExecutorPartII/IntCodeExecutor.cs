@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace IntCodeExecutorPartII
 {
@@ -6,32 +7,31 @@ namespace IntCodeExecutorPartII
   {
     private int _iPtr;
     private int[] _intCode;
-    private readonly int[] _memory;
-    private readonly int[] _input;
-    private int _inIndex;
+    private readonly int[] _memory;    
+    private Queue _inputQueue;
+    private bool _awaitingInput;
+
     private int? _output;
+    
+    //public int[] IntCode { get => _intCode; set => _intCode = value; }
+    public int[] IntCode { get => _intCode; }
+    public bool AwaitingInput { get => _awaitingInput; }
 
-    public int[] IntCode { get => _intCode; set => _intCode = value; }
+    public Queue InputQueue  { get => _inputQueue; set => _inputQueue = value; }
+
     public int? Output { get => _output; }
-
-    public IntCodeExecutor(int[] intCode, int[] input)
+    
+    public IntCodeExecutor(int[] intCode)
     {
       _memory = new int[intCode.Length];
       _memory.Initialize();
       Array.Copy(intCode, _memory, intCode.Length);
       _intCode = intCode;
       _iPtr = 0;
-      _input = input;
-      _inIndex = 0;
       _output = null;
-    }
-
-    public void Initialize()
-    {
-      Array.Copy(_memory, _intCode, _memory.Length);
-      _iPtr = 0;
-      _inIndex = 0;
-      _output = null;
+      _inputQueue = new Queue();
+      _awaitingInput = false;
+      Initialize();
     }
 
     public int[] Execute()
@@ -76,9 +76,29 @@ namespace IntCodeExecutorPartII
             _iPtr = 0;  //reset
             throw new InvalidOperationException("Unknown Opcode");
         }
+
+        if (_awaitingInput)
+          return _intCode;
       }
 
       return _intCode;
+    }
+
+    public void ResumeExecution()
+    {
+      if (_awaitingInput)
+      {
+        _awaitingInput = false;
+        _output = null;
+        Execute();
+      }
+    }
+
+    public void Initialize()
+    {
+      Array.Copy(_memory, _intCode, _memory.Length);
+      _iPtr = 0;
+      _output = null;
     }
 
     private void Add(Instruction i)
@@ -113,13 +133,13 @@ namespace IntCodeExecutorPartII
 
     private void Read(Instruction i)
     {
-      //Console.Write("\n please enter a diagnostic code and press enter:  ");
-      //_intCode[_intCode[_iPtr + 1]] = int.Parse(Console.ReadLine());
-
-      _intCode[_intCode[_iPtr + 1]] = _input[_inIndex];
-      _inIndex++;
-
-      _iPtr += 2;
+      if (_inputQueue.Count != 0)
+      {
+        _intCode[_intCode[_iPtr + 1]] = (int)_inputQueue.Dequeue();
+        _iPtr += 2;
+      }
+      else
+        _awaitingInput = true;
     }
 
     private void Write(Instruction i)
@@ -131,9 +151,7 @@ namespace IntCodeExecutorPartII
       else
         p1 = _intCode[_iPtr + 1];
 
-      //Console.WriteLine("\n value :  {0}", p1);
       _output = p1;
-
       _iPtr += 2;
     }
 
