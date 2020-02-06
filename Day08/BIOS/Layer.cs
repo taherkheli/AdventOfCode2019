@@ -2,23 +2,16 @@
 {
   public class Layer
   {
-    private int _rows;
-    private int _columns;
-    private int[,] _data;
+    private readonly int _rows;
+    private readonly int _columns;
+    private readonly int[] _data;
 
     public Layer(int rows, int columns, int[] input)
     {
       _rows = rows;
       _columns = columns;
-      _data = new int[_rows, columns];
+      _data = new int[_rows * _columns];
       FillData(input);
-    }
-
-    public Layer(int rows, int columns)
-    {
-      _rows = rows;
-      _columns = columns;
-      _data = new int[_rows, columns];
     }
 
     public int Zeroes
@@ -45,32 +38,43 @@
       }
     }
 
+    public int[] Data { get => _data; }
+
+    //paints a layer on top of itself to return a new merged layer
+    public Layer PaintOnTop(Layer layer)
+    {
+      var result = new Layer(this._rows, this._columns, this._data);
+
+      for (int i = 0; i < result._data.Length; i++)
+      {
+        if (result._data[i] == 2)   //if pixel is transparent, overwrite it
+          result._data[i] = layer._data[i];        
+      }
+
+      return result;
+    }
+       
+    private int CountOccurences(int digit)
+    {
+      int result = 0;
+      int size = _rows * _columns;
+
+      for (int i = 0; i < size; i++)
+      {
+        if (_data[i] == digit)
+          result++;
+      }
+
+      return result;
+    }
+
     private void FillData(int[] input)
     {
       if (input.Length == (_rows * _columns))
       {
-        int index = 0;
-        for (int i = 0; i < _rows; i++)
-        {
-          for (int j = 0; j < _columns; j++)
-          {
-            _data[i, j] = input[index];
-            index++;
-          }
-        }
+        for (int i = 0; i < input.Length; i++)
+          _data[i] = input[i];
       }
-    }
-
-    private int CountOccurences(int digit)
-    {
-      int result = 0;
-
-      for (int i = 0; i < _rows; i++)
-        for (int j = 0; j < _columns; j++)
-          if (_data[i, j] == digit)
-            result++;
-
-      return result;
     }
   }
 }
