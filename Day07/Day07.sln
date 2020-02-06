@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutioner", "IntCodeExecutioner\IntCodeExecutioner.csproj", "{CC541A2E-A080-4C21-B9FC-ECD5002895C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutor", "IntCodeExecutor\IntCodeExecutor.csproj", "{CC541A2E-A080-4C21-B9FC-ECD5002895C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutorTest", "IntCodeExecutorTest\IntCodeExecutorTest.csproj", "{E2EEE484-C0DE-4A03-B83D-9CB456885452}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntCodeExecutorPartII", "IntCodeExecutorPartII\IntCodeExecutorPartII.csproj", "{567CB22B-B63E-489C-A116-7B64B979E336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntCodeExecutorPartIITest", "IntCodeExecutorPartIITest\IntCodeExecutorPartIITest.csproj", "{5128A564-8AE0-4CB0-B42F-30BFC27AE39C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{CC541A2E-A080-4C21-B9FC-ECD5002895C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC541A2E-A080-4C21-B9FC-ECD5002895C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC541A2E-A080-4C21-B9FC-ECD5002895C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2EEE484-C0DE-4A03-B83D-9CB456885452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2EEE484-C0DE-4A03-B83D-9CB456885452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2EEE484-C0DE-4A03-B83D-9CB456885452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2EEE484-C0DE-4A03-B83D-9CB456885452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{567CB22B-B63E-489C-A116-7B64B979E336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{567CB22B-B63E-489C-A116-7B64B979E336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{567CB22B-B63E-489C-A116-7B64B979E336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{567CB22B-B63E-489C-A116-7B64B979E336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5128A564-8AE0-4CB0-B42F-30BFC27AE39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5128A564-8AE0-4CB0-B42F-30BFC27AE39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5128A564-8AE0-4CB0-B42F-30BFC27AE39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5128A564-8AE0-4CB0-B42F-30BFC27AE39C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
