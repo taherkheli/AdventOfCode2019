@@ -117,16 +117,24 @@ namespace AsteroidDetection
           double slope_b = (double)(b.Position.Y - y) / (b.Position.X - x);
 
           if (((a.Position.X - x) == 0) && ((b.Position.X - x) == 0))
-            result.Add(new Point(x, y));
+          {
+            var p = new Point(x, y);
+            if (result.Contains(p) ==  false)
+              result.Add(p);
+          }
           else if (slope_a == slope_b)
-            result.Add(new Point(x, y));
+          {
+            var p = new Point(x, y);
+            if (result.Contains(p) == false)
+              result.Add(p);
+          }
         }
       }
 
       result = result.OrderBy(p => p.X).ToList();
-      result = result.OrderBy(p => p.Y).ToList(); 
+      result = result.OrderBy(p => p.Y).ToList();
 
       return result;
-    }      
+    }
   }
 }

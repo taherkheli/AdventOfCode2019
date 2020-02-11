@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -26,7 +25,7 @@ namespace AsteroidDetection
           highest = count;
       }
 
-      Console.WriteLine("The highest was : {0}", highest);
+      Console.WriteLine("\nThe highest number of detectable asteroids was : {0}\n", highest);
     }
   }
 }
