@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AsteroidDetection
 {
@@ -8,8 +7,7 @@ namespace AsteroidDetection
   {
     private readonly int _rows;
     private readonly int _columns;
-    private readonly int _size;
-    private List<Asteroid> _asteroids;
+    private readonly List<Asteroid> _asteroids;
 
     public List<Asteroid> Asteroids { get => _asteroids; }
 
@@ -19,11 +17,8 @@ namespace AsteroidDetection
       {
         _rows = lines.Count;
         _columns = lines[0].Length;
-        _size = _rows * _columns;
         _asteroids = GetAsteroids(lines);
       }
-
-
     }
 
     private List<Asteroid> GetAsteroids(List<string> lines)
@@ -44,95 +39,94 @@ namespace AsteroidDetection
       return result;
     }
 
-    private List<Asteroid> GetAsteroidsVisibleTo(Asteroid a)
-    {      
+    public List<Asteroid> GetAsteroidsVisibleTo(Asteroid a)
+    {
       List<Asteroid> ToAnalyze = new List<Asteroid>(_asteroids);
-      ToAnalyze.Remove(a);
-
       var Visible = new List<Asteroid>();
       var Hidden = new List<Asteroid>();
-
+           
       while (ToAnalyze.Count > 0)
       {
+        ToAnalyze.Remove(a);
         var b = ToAnalyze[0];
+        
+        var line = GetLine(a, b);        
+        int index_a = line.FindIndex(p => (p.X == a.Position.X) && (p.Y == a.Position.Y));
+        bool firstFound = false;
 
+        for (int i = index_a + 1; i < line.Count; i++)
+        {          
+          var p = line[i];
+          var asteroid = ToAnalyze.Find(a => (a.Position.X == p.X) && (a.Position.Y == p.Y));
 
-        //pluck 1 (and remove from ToAnalyze)
-        //
-        //determine LOS   between a and this one
-        //
-        //process results i.e. dump the identified ones in the right bucket 
-        //
-        //repeat   (remove here if not done already)
+          if (asteroid != null)
+          {
+            if (firstFound == false)   
+            {
+              Visible.Add(asteroid);
+              ToAnalyze.Remove(asteroid);
+              firstFound = true;
+            }
+            else
+            {
+              Hidden.Add(asteroid);
+              ToAnalyze.Remove(asteroid);
+            }
+          }
+        }
 
+        firstFound = false;
+        for (int i = index_a - 1; i > -1 ; i--)
+        {
+          var p = line[i];
+          var asteroid = ToAnalyze.Find(a => (a.Position.X == p.X) && (a.Position.Y == p.Y));
 
-        continue;
+          if (asteroid != null)
+          {
+            if (firstFound == false)
+            {
+              Visible.Add(asteroid);
+              ToAnalyze.Remove(asteroid);
+              firstFound = true;
+            }
+            else
+            {
+              Hidden.Add(asteroid);
+              ToAnalyze.Remove(asteroid);
+            }
+          }
+        }
       }
-      
-      
+
       return Visible;
     }
 
-
-    public List<Point> GetLineOfSight(Asteroid a, Asteroid b)
+    public List<Point> GetLine(Asteroid a, Asteroid b)
     {
-      //TODO: improve it so Line of sight actually is all possible points on the straight line
-
-      var result = new List<Point>();
-      var forward = new List<Point>();
-      var backward = new List<Point>();
-
-      var deltaX = Math.Abs(a.Position.X - b.Position.X);
-      var deltaY = Math.Abs(a.Position.Y - b.Position.Y);
-
-      if (deltaX >= deltaY)
+      var result = new List<Point>
       {
-        //forwrads
-        forward.Add(a.Position); //operand must be on line of sight
+        a.Position,
+        b.Position
+      };
 
-        Point next = new Point((a.Position.X + deltaX) , (a.Position.Y + deltaY));
-
-        while (next.X < _columns)  //inside grid
-        {
-          forward.Add(next);
-          next = new Point((next.X + deltaX), (next.Y + deltaY));
-        }
-
-        //backwards
-        next = new Point((a.Position.X - deltaX), (a.Position.Y - deltaY));
-
-        while (next.X > -1)  
-        {
-          backward.Add(next);
-          next = new Point((next.X - deltaX), (next.Y - deltaY));
-        }
-      }
-      else  //deltaY > deltaX
+      for (int x = 0; x < _columns; x++)
       {
-        forward.Add(a.Position); 
-        Point next = new Point((a.Position.X + deltaX), (a.Position.Y + deltaY));
-
-        while (next.Y < _rows)  
+        for (int y = 0; y < _rows; y++)
         {
-          forward.Add(next);
-          next = new Point((next.X + deltaX), (next.Y + deltaY));
-        }
+          double slope_a = (double)(a.Position.Y - y) / (a.Position.X - x);
+          double slope_b = (double)(b.Position.Y - y) / (b.Position.X - x);
 
-        next = new Point((a.Position.X - deltaX), (a.Position.Y - deltaY));
-
-        while (next.Y > -1)  
-        {
-          backward.Add(next);
-          next = new Point((next.X - deltaX), (next.Y - deltaY));
+          if (((a.Position.X - x) == 0) && ((b.Position.X - x) == 0))
+            result.Add(new Point(x, y));
+          else if (slope_a == slope_b)
+            result.Add(new Point(x, y));
         }
       }
 
-      //combine in right order
-      backward.Reverse();
-      result.AddRange(backward);
-      result.AddRange(forward);
+      result = result.OrderBy(p => p.X).ToList();
+      result = result.OrderBy(p => p.Y).ToList(); 
 
       return result;
-    }
+    }      
   }
 }
