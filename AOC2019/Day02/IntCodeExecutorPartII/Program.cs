@@ -7,7 +7,7 @@ namespace IntCodeExecutorPartII
   {
     static void Main()
     {
-      string path = "input2.txt";
+      string path = "input.txt";
       int magicNumber = 19690720;
       int verb = 0;
       int noun = 0;

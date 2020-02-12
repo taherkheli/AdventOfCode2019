@@ -7,7 +7,7 @@ namespace Part1
   {
     static void Main()
     {
-      string inputFile = Path.GetFullPath(@" ..\..\..\..\..\..\input.txt");
+      string inputFile = "input.txt";
       Calculate(inputFile);
     }
 

@@ -6,6 +6,7 @@ namespace CrossingWires
 {
   class Program
   {
+    //TODO: figure out what is wrong and also investigate how come I checked in broken code
     static void Main()
     {
       Wire wire1 = new Wire();
@@ -18,9 +19,9 @@ namespace CrossingWires
       wire1.Move(LoadInput(strings[0]));
       wire2.Move(LoadInput(strings[1].Substring(1)));  //get rid of '\n' in second string
 
-      //TODO: finding intersections in bands worked super for part 1 performance improvement! can be set to 100 and everything wikll work well
+      //TODO: finding intersections in bands worked super for part 1 performance improvement! can be set to 100 and everything will work well
       //for part 2 it has to be sufficiently big to guarantee that the band is big enough to contain all the steps a wire takes
-      //after some hit and trial, I foudn 3000 to be a good number as 2800 wont cut it. Not ideal but I am no JLo ;)
+      //after some hit and trial, I found 3000 to be a good number as 2800 won't cut it. Not ideal but I am no JLo ;)
 
       int start = 0;
       int step = 3000;    //read comment above        

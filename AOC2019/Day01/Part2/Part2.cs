@@ -7,7 +7,7 @@ namespace Part2
   {
     static void Main()
     {
-      string inputFile = Path.GetFullPath(@" ..\..\..\..\..\..\input.txt");
+      string inputFile = "input.txt";
       Calculate(inputFile);
     }
 
@@ -33,10 +33,10 @@ namespace Part2
     {
       long sum = 0;
       long next = val;
-      
+
       while (true)
       {
-        next = CalculateFuel(next);        
+        next = CalculateFuel(next);
         sum += next;
 
         if (next < 6)  //no point botherin
@@ -48,7 +48,7 @@ namespace Part2
 
     private static long CalculateFuel(long val)
     {
-      return ((val/3)-2);
+      return ((val / 3) - 2);
     }
   }
 }

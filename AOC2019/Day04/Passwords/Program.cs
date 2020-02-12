@@ -5,6 +5,8 @@ namespace Passwords
 {
   class Program
   {
+    //TODO: Where is part1??
+
     static void Main()
     {
       int lb = 359282;

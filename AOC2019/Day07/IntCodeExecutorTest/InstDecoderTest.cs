@@ -10,11 +10,13 @@ namespace InstDecoderTest
     public void DecoderWorks()
     {
       int input = 1002;
-      var expected = new Instruction();
-      expected.OpCode = Opcodes.Multiply;
-      expected.p1ParamMode = ParamMode.Ref;
-      expected.p2ParamMode = ParamMode.Val;
-      expected.p3ParamMode = ParamMode.Ref;
+      var expected = new Instruction
+      {
+        OpCode = Opcodes.Multiply,
+        p1ParamMode = ParamMode.Ref,
+        p2ParamMode = ParamMode.Val,
+        p3ParamMode = ParamMode.Ref
+      };
 
       var actual = InstDecoder.Decode(input);
 
