@@ -6,7 +6,7 @@ namespace CrossingWires
 {
   class Program
   {
-    //TODO: figure out what is wrong and also investigate how come I checked in broken code
+    //TODO: figure out how to improve the algo to have better performance
     static void Main()
     {
       Wire wire1 = new Wire();
