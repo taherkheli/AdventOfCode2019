@@ -93,7 +93,6 @@ namespace AsteroidDetectionTest
       CollectionAssert.AreEqual(expected, actual, "OK!");
     }
 
-
     [TestMethod]
     public void TC1()
     {
