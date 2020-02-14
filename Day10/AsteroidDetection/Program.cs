@@ -41,7 +41,7 @@ namespace AsteroidDetection
       while (grid.Asteroids.Count > 1) //all except the monitoring station
       {
         rotationCount++;
-        Console.WriteLine("Rotation #: {0}", rotationCount);
+        Console.WriteLine("\nRotation #: {0}", rotationCount);
 
         //process Quad1
         Console.WriteLine("\nProcessing quadrant 1");
@@ -50,9 +50,10 @@ namespace AsteroidDetection
         foreach (var p in pointsOfInterest)
         {
           var line = grid.GetLine(actualAsteroid, new Asteroid(p));
-          int index_a = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+
           //look for an asteroid, mark it for deletion if found, and break
-          for (int j = index_a - 1; j > -1; j--)
+          for (int j = index_center - 1; j > -1; j--)
           {
             var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[j].X) && (a.Position.Y == line[j].Y));
             if (asteroid != null)
@@ -67,8 +68,6 @@ namespace AsteroidDetection
             }
           }
         }
-        foreach (var asteroid in toBeVaporized)
-          grid.Asteroids.Remove(asteroid);
 
         //process Quad2
         Console.WriteLine("\nProcessing quadrant 2");
@@ -91,12 +90,59 @@ namespace AsteroidDetection
               break;
             }
           }
-        }   
-        foreach (var asteroid in toBeVaporized)
-            grid.Asteroids.Remove(asteroid);
+        } 
 
+        //process Quad3
+        Console.WriteLine("\nProcessing quadrant 3");
+        pointsOfInterest = grid.GetPointsListQ3(new Point(X, Y));
+        foreach (var p in pointsOfInterest)
+        {
+          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
+          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+          for (int i = index_center + 1; i < line.Count; i++)
+          {
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[i].X) && (a.Position.Y == line[i].Y));
+            if (asteroid != null)
+            {
+              if (toBeVaporized.Contains(asteroid) == false)
+              {
+                toBeVaporized.Add(asteroid);
+                vaporizedCount++;
+                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
+              }
+              break;
+            }
+          }
+        }
+
+        //process Quad4
+        Console.WriteLine("\nProcessing quadrant 4");
+        pointsOfInterest = grid.GetPointsListQ4(new Point(X, Y));
+        foreach (var p in pointsOfInterest)
+        {
+          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
+          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+
+          for (int j = index_center - 1; j > -1; j--)
+          {
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[j].X) && (a.Position.Y == line[j].Y));
+            if (asteroid != null)
+            {
+              if (toBeVaporized.Contains(asteroid) == false)
+              {
+                toBeVaporized.Add(asteroid);
+                vaporizedCount++;
+                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
+              }
+              break;
+            }
+          }
 
         }
+        
+        foreach (var asteroid in toBeVaporized)
+          grid.Asteroids.Remove(asteroid);      
+      }
     }
   }
 }
