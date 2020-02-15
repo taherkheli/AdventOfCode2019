@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AsteroidDetection
@@ -11,7 +10,6 @@ namespace AsteroidDetection
     private readonly List<Asteroid> _asteroids;
 
     public List<Asteroid> Asteroids { get => _asteroids; }
-
     public int Rows => _rows;
 
     public int Columns => _columns;
@@ -125,30 +123,29 @@ namespace AsteroidDetection
 
       return result;
     }
-
+    
     public List<Point> GetPointsListQ1(Point center)
     {
       List<Point> result = new List<Point>();
       List<Point> allPoints = new List<Point>();
-      var angles = new List<double> { };
+      var angles = new List<double> {};
+      Point current = new Point();
 
-      //add starting point and its angle
-      Point current = new Point(center.X, 0);
-      allPoints.Add(current);
-      angles.Add(current.CalculateAngleQ1(center));
-
-      for (int i = 1; center.X + i < _columns; i++)
+      for (int i = 0; (center.X + i) < _columns; i++)
       {
-        var X = center.X + i;
+        //Console.WriteLine("\ncenter.X + i =  {0}", center.X + i);
+
         for (int j = 0; j < center.Y; j++)
         {
-          current = new Point(X, j);
+          current = new Point(center.X + i, j);
           allPoints.Add(current);
           angles.Add(current.CalculateAngleQ1(center));
+
+          //Console.WriteLine("point is ({0},{1})", center.X + i, j);
         }
       }
-
-      angles = Helpers.RemoveDuplicates(angles);
+           
+      angles = Helpers.RemoveDuplicates(angles);      
       angles.Sort();
 
       foreach (var angle in angles)
@@ -157,26 +154,24 @@ namespace AsteroidDetection
         result.Add(point);
       }
 
+      //foreach (var point in result)
+      //  Console.WriteLine("point is ({0},{1}) and theta is {2} radians", point.X, point.Y, point.CalculateAngleQ1(center));
+
       return result;
     }
-
+    
     public List<Point> GetPointsListQ2(Point center)
     {
       List<Point> result = new List<Point>();
       List<Point> allPoints = new List<Point>();
       var angles = new List<double> { };
+      Point current = new Point();
 
-      //add starting point and its angle
-      Point current = new Point(_columns - 1 , center.Y);
-      allPoints.Add(current);
-      angles.Add(current.CalculateAngleQ2(center));
-
-      for (int i = 1; center.Y + i < _rows; i++)
+      for (int i = 0; (center.Y + i) < _rows; i++)
       {
-        var Y = center.Y + i;
-        for (int j = _columns-1; j > center.X; j--)
+        for (int j = (_columns - 1); j > center.X; j--)
         {
-          current = new Point(j, Y);
+          current = new Point(j, center.Y + i);
           allPoints.Add(current);
           angles.Add(current.CalculateAngleQ2(center));
         }
@@ -193,57 +188,48 @@ namespace AsteroidDetection
 
       return result;
     }
-
+        
     public List<Point> GetPointsListQ3(Point center)
     {
       List<Point> result = new List<Point>();
       List<Point> allPoints = new List<Point>();
       var angles = new List<double> { };
+      Point current = new Point();
 
-      Point current = new Point(center.X, _rows - 1);
-      allPoints.Add(current);
-      angles.Add(current.CalculateAngleQ3(center, _rows));
-
-      for (int i = 1; center.X - i > -1; i++)
+      for (int i = 0; (center.X - i) > -1; i++)
       {
-        var X = center.X - i;
-        for (int j = _rows - 1; j > center.Y; j--)
+        for (int j = center.Y + 1; j < _rows; j++)
         {
-          current = new Point(X, j);
+          current = new Point(center.X - i, j);
           allPoints.Add(current);
-          angles.Add(current.CalculateAngleQ3(center, _rows));
+          angles.Add(current.CalculateAngleQ3(center));
         }
       }
-
+      
       angles = Helpers.RemoveDuplicates(angles);
       angles.Sort();
 
       foreach (var angle in angles)
       {
-        var point = allPoints.Find(p => (p.CalculateAngleQ3(center, _rows) == angle));
+        var point = allPoints.Find(p => (p.CalculateAngleQ3(center) == angle));
         result.Add(point);
       }
 
       return result;
     }
-
-
+    
     public List<Point> GetPointsListQ4(Point center)
     {
       List<Point> result = new List<Point>();
       List<Point> allPoints = new List<Point>();
       var angles = new List<double> { };
+      Point current = new Point();
 
-      Point current = new Point(0, center.Y);
-      allPoints.Add(current);
-      angles.Add(current.CalculateAngleQ4(center));
-
-      for (int i = 1; center.Y - i > -1; i++)
+      for (int i = 0; (center.Y - i) > -1; i++)
       {
-        var Y = center.Y - i;
         for (int j = 0; j < center.X; j++)
         {
-          current = new Point(j, Y);
+          current = new Point(j, center.Y - i);
           allPoints.Add(current);
           angles.Add(current.CalculateAngleQ4(center));
         }
@@ -254,13 +240,92 @@ namespace AsteroidDetection
 
       foreach (var angle in angles)
       {
-        var point = allPoints.Find(p => (p.CalculateAngleQ2(center) == angle));
+        var point = allPoints.Find(p => (p.CalculateAngleQ4(center) == angle));
         result.Add(point);
       }
 
       return result;
     }
 
+    public List<Point> GetLineOfSightQ1(Point center, Point p)
+    {
+      var result = new List<Point> { };
+      var point = new Point();
+      var desiredAngle = p.CalculateAngleQ1(center);
+
+      for (int i = 0; (center.X + i) < _columns; i++)
+      {
+        for (int j = 0; j < center.Y; j++)
+        {
+          point = new Point(center.X + i, j);
+          if (point.CalculateAngleQ1(center) == desiredAngle)
+            result.Add(point);
+        }
+      }
+
+      result = result.OrderByDescending(p => p.Y).ToList();   //closest from the center point first
+      return result;
+    }
+
+    public List<Point> GetLineOfSightQ2(Point center, Point p)
+    {
+      var result = new List<Point> { };
+      var point = new Point();
+      var desiredAngle = p.CalculateAngleQ2(center);
+
+      for (int i = 0; (center.Y + i) < _rows; i++)
+      {
+        for (int j = (_columns - 1); j > center.X; j--)
+        {
+          point = new Point(j, center.Y + i);
+          if (point.CalculateAngleQ2(center) == desiredAngle)
+            result.Add(point);
+        }
+      }
+
+      result = result.OrderBy(p => p.X).ToList();   //closest from the center point first
+      return result;
+    }
+
+    public List<Point> GetLineOfSightQ3(Point center, Point p)
+    {
+      var result = new List<Point> { };
+      var point = new Point();
+      var desiredAngle = p.CalculateAngleQ3(center);
+
+      for (int i = 0; (center.X - i) > -1; i++)
+      {
+        for (int j = center.Y + 1; j < _rows; j++)
+        {
+          point = new Point(center.X - i, j);
+          if (point.CalculateAngleQ3(center) == desiredAngle)
+            result.Add(point);
+        }
+      }
+
+      result = result.OrderBy(p => p.Y).ToList();   //closest from the center point first
+      return result;
+    }
+
+    public List<Point> GetLineOfSightQ4(Point center, Point p)
+    {
+      var result = new List<Point> { };
+      var point = new Point();
+      var desiredAngle = p.CalculateAngleQ4(center);
+
+      for (int i = 0; (center.Y - i) > -1; i++)
+      {
+        for (int j = 0; j < center.X; j++)
+        {
+          point = new Point(j, center.Y - i);
+          if (point.CalculateAngleQ4(center) == desiredAngle)
+            result.Add(point);
+        }
+      }     
+
+      result = result.OrderByDescending(p => p.X).ToList();   //closest from the center point first
+      return result;
+    }
 
     private List<Asteroid> GetAsteroids(List<string> lines)
     {

@@ -35,6 +35,7 @@ namespace AsteroidDetection
 
       /************* Part II ****************/
 
+      Point center = new Point(actualAsteroid.Position.X, actualAsteroid.Position.Y);
       int vaporizedCount = 0;
       int rotationCount = 0;
 
@@ -45,25 +46,20 @@ namespace AsteroidDetection
 
         //process Quad1
         Console.WriteLine("\nProcessing quadrant 1");
-        var pointsOfInterest = grid.GetPointsListQ1(new Point(X, Y));
-        var toBeVaporized = new List<Asteroid>() { };
+        var pointsOfInterest = grid.GetPointsListQ1(center);    //points of interest represent one point from each line the laser will shoot at during rotation
         foreach (var p in pointsOfInterest)
         {
-          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
-          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+          var lineOfSight = grid.GetLineOfSightQ1(center, p);
 
-          //look for an asteroid, mark it for deletion if found, and break
-          for (int j = index_center - 1; j > -1; j--)
+          for (int i = 0; i < lineOfSight.Count; i++)
           {
-            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[j].X) && (a.Position.Y == line[j].Y));
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == lineOfSight[i].X) && (a.Position.Y == lineOfSight[i].Y));
+            
             if (asteroid != null)
             {
-              if (toBeVaporized.Contains(asteroid) == false)
-              {
-                toBeVaporized.Add(asteroid);
-                vaporizedCount++;
-                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
-              }
+              vaporizedCount++;
+              grid.Asteroids.Remove(asteroid);
+              Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
               break;
             }
           }
@@ -71,45 +67,41 @@ namespace AsteroidDetection
 
         //process Quad2
         Console.WriteLine("\nProcessing quadrant 2");
-        pointsOfInterest = grid.GetPointsListQ2(new Point(X, Y));
+        pointsOfInterest = grid.GetPointsListQ2(center);
         foreach (var p in pointsOfInterest)
         {
-          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
-          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
-          for (int i = index_center + 1; i < line.Count; i++)
+          var lineOfSight = grid.GetLineOfSightQ2(center, p);
+
+          for (int i = 0; i < lineOfSight.Count; i++)
           {
-            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[i].X) && (a.Position.Y == line[i].Y));
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == lineOfSight[i].X) && (a.Position.Y == lineOfSight[i].Y));
+
             if (asteroid != null)
             {
-              if (toBeVaporized.Contains(asteroid) == false)
-              {
-                toBeVaporized.Add(asteroid);
-                vaporizedCount++;
-                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
-              }
+              vaporizedCount++;
+              grid.Asteroids.Remove(asteroid);
+              Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
               break;
             }
           }
-        } 
+        }
 
         //process Quad3
         Console.WriteLine("\nProcessing quadrant 3");
-        pointsOfInterest = grid.GetPointsListQ3(new Point(X, Y));
+        pointsOfInterest = grid.GetPointsListQ3(center);        
         foreach (var p in pointsOfInterest)
         {
-          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
-          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
-          for (int i = index_center + 1; i < line.Count; i++)
+          var lineOfSight = grid.GetLineOfSightQ3(center, p);
+
+          for (int i = 0; i < lineOfSight.Count; i++)
           {
-            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[i].X) && (a.Position.Y == line[i].Y));
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == lineOfSight[i].X) && (a.Position.Y == lineOfSight[i].Y));
+
             if (asteroid != null)
             {
-              if (toBeVaporized.Contains(asteroid) == false)
-              {
-                toBeVaporized.Add(asteroid);
-                vaporizedCount++;
-                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
-              }
+              vaporizedCount++;
+              grid.Asteroids.Remove(asteroid);
+              Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
               break;
             }
           }
@@ -117,31 +109,24 @@ namespace AsteroidDetection
 
         //process Quad4
         Console.WriteLine("\nProcessing quadrant 4");
-        pointsOfInterest = grid.GetPointsListQ4(new Point(X, Y));
+        pointsOfInterest = grid.GetPointsListQ4(center);    
         foreach (var p in pointsOfInterest)
         {
-          var line = grid.GetLine(actualAsteroid, new Asteroid(p));
-          int index_center = line.FindIndex(p => (p.X == X) && (p.Y == Y));
+          var lineOfSight = grid.GetLineOfSightQ4(center, p);
 
-          for (int j = index_center - 1; j > -1; j--)
+          for (int i = 0; i < lineOfSight.Count; i++)
           {
-            var asteroid = grid.Asteroids.Find(a => (a.Position.X == line[j].X) && (a.Position.Y == line[j].Y));
+            var asteroid = grid.Asteroids.Find(a => (a.Position.X == lineOfSight[i].X) && (a.Position.Y == lineOfSight[i].Y));
+
             if (asteroid != null)
             {
-              if (toBeVaporized.Contains(asteroid) == false)
-              {
-                toBeVaporized.Add(asteroid);
-                vaporizedCount++;
-                Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
-              }
+              vaporizedCount++;
+              grid.Asteroids.Remove(asteroid);
+              Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
               break;
             }
           }
-
         }
-        
-        foreach (var asteroid in toBeVaporized)
-          grid.Asteroids.Remove(asteroid);      
       }
     }
   }
