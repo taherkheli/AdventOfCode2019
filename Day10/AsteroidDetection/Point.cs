@@ -13,38 +13,23 @@ namespace AsteroidDetection
     public int X;
     public int Y;
 
-    public double CalculateAngleQ1(Point center)
+    public double CalculateAngle(Point center)
     {
-      double a = this.X - center.X;   //opposite
-      double b = center.Y - this.Y;   //adjacent
-      double angle = Math.Tanh(a / b);
+      double a, b;
+      double angle = double.NaN;
 
-      return angle;
-    }
-
-    public double CalculateAngleQ2(Point center)
-    {
-      double a = this.Y - center.Y;   //opposite
-      double b = this.X - center.X;   //adjacent
-      double angle = Math.Tanh(a / b);
-
-      return angle;
-    }
-
-    public double CalculateAngleQ3(Point center)
-    {
-      double a = center.X - this.X;   //opposite
-      double b = this.Y - center.Y;   //adjacent
-      double angle = Math.Tanh(a / b);
-
-      return angle;
-    }
-
-    public double CalculateAngleQ4(Point center)
-    {
-      double a = center.Y - this.Y;   //opposite
-      double b = center.X - this.X;   //adjacent
-      double angle = Math.Tanh(a / b);
+      if ( ((this.X >= center.X) && (this.Y < center.Y)) || ((this.X <= center.X) && (this.Y > center.Y)))   //Q1|Q3
+      {
+        a = Math.Abs(center.X - this.X);   //opposite
+        b = Math.Abs(center.Y - this.Y);   //adjacent
+        angle = Math.Tanh(a / b);
+      }
+      else   //Q2|Q4
+      {
+        a = Math.Abs(center.Y - this.Y);   //opposite
+        b = Math.Abs(center.X - this.X);   //adjacent
+        angle = Math.Tanh(a / b);
+      }
 
       return angle;
     }
