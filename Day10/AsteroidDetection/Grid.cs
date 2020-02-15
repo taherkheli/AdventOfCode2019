@@ -246,84 +246,72 @@ namespace AsteroidDetection
 
       return result;
     }
-
-    public List<Point> GetLineOfSightQ1(Point center, Point p)
+       
+    public List<Point> GetLineOfSight(Point center, Point p)
     {
       var result = new List<Point> { };
       var point = new Point();
       var desiredAngle = p.CalculateAngle(center);
 
-      for (int i = 0; (center.X + i) < _columns; i++)
+      switch (p.GetQuadrant(center))
       {
-        for (int j = 0; j < center.Y; j++)
-        {
-          point = new Point(center.X + i, j);
-          if (point.CalculateAngle(center) == desiredAngle)
-            result.Add(point);
-        }
+        case Quadrant.One:          
+          for (int i = 0; (center.X + i) < _columns; i++)
+          {
+            for (int j = 0; j < center.Y; j++)
+            {
+              point = new Point(center.X + i, j);
+              if (point.CalculateAngle(center) == desiredAngle)
+                result.Add(point);
+            }
+          }
+          result = result.OrderByDescending(p => p.Y).ToList();   //closest from the center point first
+          break;
+
+        case Quadrant.Two:
+          for (int i = 0; (center.Y + i) < _rows; i++)
+          {
+            for (int j = (_columns - 1); j > center.X; j--)
+            {
+              point = new Point(j, center.Y + i);
+              if (point.CalculateAngle(center) == desiredAngle)
+                result.Add(point);
+            }
+          }
+          result = result.OrderBy(p => p.X).ToList();   
+          break;
+
+        case Quadrant.Three:
+          for (int i = 0; (center.X - i) > -1; i++)
+          {
+            for (int j = center.Y + 1; j < _rows; j++)
+            {
+              point = new Point(center.X - i, j);
+              if (point.CalculateAngle(center) == desiredAngle)
+                result.Add(point);
+            }
+          }
+          result = result.OrderBy(p => p.Y).ToList();   
+          break;
+
+        case Quadrant.Four:
+          for (int i = 0; (center.Y - i) > -1; i++)
+          {
+            for (int j = 0; j < center.X; j++)
+            {
+              point = new Point(j, center.Y - i);
+              if (point.CalculateAngle(center) == desiredAngle)
+                result.Add(point);
+            }
+          }
+          result = result.OrderByDescending(p => p.X).ToList();  
+          break;
+
+        default:
+          result = null;
+          break;
       }
 
-      result = result.OrderByDescending(p => p.Y).ToList();   //closest from the center point first
-      return result;
-    }
-
-    public List<Point> GetLineOfSightQ2(Point center, Point p)
-    {
-      var result = new List<Point> { };
-      var point = new Point();
-      var desiredAngle = p.CalculateAngle(center);
-
-      for (int i = 0; (center.Y + i) < _rows; i++)
-      {
-        for (int j = (_columns - 1); j > center.X; j--)
-        {
-          point = new Point(j, center.Y + i);
-          if (point.CalculateAngle(center) == desiredAngle)
-            result.Add(point);
-        }
-      }
-
-      result = result.OrderBy(p => p.X).ToList();   //closest from the center point first
-      return result;
-    }
-
-    public List<Point> GetLineOfSightQ3(Point center, Point p)
-    {
-      var result = new List<Point> { };
-      var point = new Point();
-      var desiredAngle = p.CalculateAngle(center);
-
-      for (int i = 0; (center.X - i) > -1; i++)
-      {
-        for (int j = center.Y + 1; j < _rows; j++)
-        {
-          point = new Point(center.X - i, j);
-          if (point.CalculateAngle(center) == desiredAngle)
-            result.Add(point);
-        }
-      }
-
-      result = result.OrderBy(p => p.Y).ToList();   //closest from the center point first
-      return result;
-    }
-
-    public List<Point> GetLineOfSightQ4(Point center, Point p)
-    {
-      var result = new List<Point> { };
-      var point = new Point();
-      var desiredAngle = p.CalculateAngle(center);
-
-      for (int i = 0; (center.Y - i) > -1; i++)
-      {
-        for (int j = 0; j < center.X; j++)
-        {
-          point = new Point(j, center.Y - i);
-          if (point.CalculateAngle(center) == desiredAngle)
-            result.Add(point);
-        }
-      }
-
-      result = result.OrderByDescending(p => p.X).ToList();   //closest from the center point first
       return result;
     }
 

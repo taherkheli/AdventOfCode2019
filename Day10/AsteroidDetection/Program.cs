@@ -49,7 +49,7 @@ namespace AsteroidDetection
         var pointsOfInterest = grid.GetPointsListQ1(center);    //points of interest represent one point from each line the laser will shoot at during rotation
         foreach (var p in pointsOfInterest)
         {
-          var lineOfSight = grid.GetLineOfSightQ1(center, p);
+          var lineOfSight = grid.GetLineOfSight(center, p);
 
           for (int i = 0; i < lineOfSight.Count; i++)
           {
@@ -70,7 +70,7 @@ namespace AsteroidDetection
         pointsOfInterest = grid.GetPointsListQ2(center);
         foreach (var p in pointsOfInterest)
         {
-          var lineOfSight = grid.GetLineOfSightQ2(center, p);
+          var lineOfSight = grid.GetLineOfSight(center, p);
 
           for (int i = 0; i < lineOfSight.Count; i++)
           {
@@ -91,7 +91,7 @@ namespace AsteroidDetection
         pointsOfInterest = grid.GetPointsListQ3(center);        
         foreach (var p in pointsOfInterest)
         {
-          var lineOfSight = grid.GetLineOfSightQ3(center, p);
+          var lineOfSight = grid.GetLineOfSight(center, p);
 
           for (int i = 0; i < lineOfSight.Count; i++)
           {
@@ -112,7 +112,7 @@ namespace AsteroidDetection
         pointsOfInterest = grid.GetPointsListQ4(center);    
         foreach (var p in pointsOfInterest)
         {
-          var lineOfSight = grid.GetLineOfSightQ4(center, p);
+          var lineOfSight = grid.GetLineOfSight(center, p);
 
           for (int i = 0; i < lineOfSight.Count; i++)
           {
