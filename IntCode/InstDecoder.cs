@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IntCodeExecutorNs
+namespace IntCode
 {
   public static class InstDecoder
   {

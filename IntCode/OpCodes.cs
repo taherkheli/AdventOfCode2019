@@ -1,4 +1,4 @@
-﻿namespace IntCodeExecutorNs
+﻿namespace IntCode
 {
   public enum Opcodes
   {

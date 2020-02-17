@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using IntCode;
+using System.IO;
 
 namespace IntCodeExecutorNs
 {
@@ -7,7 +8,7 @@ namespace IntCodeExecutorNs
     static void Main()
     {
       string path = "input.txt";
-      IntCodeExecutor intCodeExecutor = new IntCodeExecutor(LoadInput(path));
+      Executor intCodeExecutor = new Executor(LoadInput(path));
       intCodeExecutor.Initialize();
       intCodeExecutor.Execute();
     }

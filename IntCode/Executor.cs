@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace IntCodeExecutorNs
+namespace IntCode
 {
-  public class IntCodeExecutor
+  public class Executor
   {
     private long _iPtr;
     private long[] _intCode;
     private long _relBase;                  //relative base for supporting relative mode parameters
-    private long _intCodeLen;
+    private readonly long _intCodeLen;
     private readonly long[] _memory;
 
     public long[] IntCode { get => _intCode; set => _intCode = value; }
 
-    public IntCodeExecutor(long[] intCode)
+    public Executor(long[] intCode)
     {
       _intCodeLen = intCode.Length;
       _memory = new long[_intCodeLen * 100];  //100 times the program
@@ -79,7 +79,7 @@ namespace IntCodeExecutorNs
 
       return _intCode;
     }
-    
+
     private void Add(Instruction i)
     {
       long p1, p2;
@@ -110,10 +110,10 @@ namespace IntCodeExecutorNs
         _memory[_iPtr + 3] = p1 * p2;
       else
         _memory[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
-          
+
       _iPtr += 4;
     }
-    
+
     private void Read(Instruction i)
     {
       Console.Write("\n please enter a diagnostic code and press enter:  ");
@@ -125,7 +125,7 @@ namespace IntCodeExecutorNs
         _memory[_iPtr + 1] = value;
       else
         _memory[_intCode[_iPtr + 1] + _relBase] = value;
-            
+
       _iPtr += 2;
     }
 
@@ -176,15 +176,15 @@ namespace IntCodeExecutorNs
       long p1, p2;
       Tuple<long, long> t = GetParameters(i);
       p1 = t.Item1;
-      p2 = t.Item2;           
-      long val = ((p1<p2)? 1: 0);
-               
+      p2 = t.Item2;
+      long val = ((p1 < p2) ? 1 : 0);
+
       if (i.p3ParamMode == ParamMode.Ref)
         _memory[_intCode[_iPtr + 3]] = val;
       else if (i.p3ParamMode == ParamMode.Val)
         _memory[_iPtr + 3] = val;
       else
-        _memory[_intCode[_iPtr + 3] + _relBase] = val;              
+        _memory[_intCode[_iPtr + 3] + _relBase] = val;
 
       _iPtr += 4;
     }
@@ -218,7 +218,7 @@ namespace IntCodeExecutorNs
       else  //Param.Rel
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
 
-      _relBase = _relBase + p1;  //update relative base
+      _relBase += p1;  //update relative base
 
       _iPtr += 2;
     }
@@ -226,7 +226,7 @@ namespace IntCodeExecutorNs
     private Tuple<long, long> GetParameters(Instruction i)
     {
       long p1, p2;
-      
+
       if (i.p1ParamMode == ParamMode.Ref)
         p1 = _memory[_intCode[_iPtr + 1]];
       else if (i.p1ParamMode == ParamMode.Val)
