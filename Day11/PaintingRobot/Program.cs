@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace IntCodeExecutorNs
+namespace PaintingRobot
 {
   class Program
   {
@@ -12,14 +12,7 @@ namespace IntCodeExecutorNs
       Executor executor = new Executor(LoadInput(path));
       executor.Initialize();
       executor.InputQueue.Enqueue(1);
-      executor.Execute();
-      Console.WriteLine("\nPart I :  {0}", (long)executor.OutputQueue.Dequeue());
-
-      //reload intcode
-      executor = new Executor(LoadInput(path));
-      executor.InputQueue.Enqueue(2);
-      executor.Execute();
-      Console.WriteLine("\nPart II :  {0}", (long)executor.OutputQueue.Dequeue());
+      var x = executor.Execute();
     }
 
     private static long[] LoadInput(string path)
@@ -34,4 +27,5 @@ namespace IntCodeExecutorNs
       return result;
     }
   }
+
 }

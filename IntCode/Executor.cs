@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace IntCode
 {
@@ -9,8 +10,14 @@ namespace IntCode
     private long _relBase;                  //relative base for supporting relative mode parameters
     private readonly long _intCodeLen;
     private readonly long[] _memory;
-
+    private Queue _inputQueue;
+    private Queue _outputQueue;
+    private bool _awaitingInput;
+    
     public long[] IntCode { get => _intCode; set => _intCode = value; }
+    public Queue InputQueue { get => _inputQueue; set => _inputQueue = value; }
+    public Queue OutputQueue { get => _outputQueue; set => _outputQueue = value; }
+    public bool AwaitingInput => _awaitingInput;
 
     public Executor(long[] intCode)
     {
@@ -21,6 +28,9 @@ namespace IntCode
       _intCode = intCode;
       _relBase = 0;
       _iPtr = 0;
+      _inputQueue = new Queue();
+      _outputQueue = new Queue();
+      _awaitingInput = false;
     }
 
     public void Initialize()
@@ -75,9 +85,21 @@ namespace IntCode
             _iPtr = 0;  //reset
             throw new InvalidOperationException("Unknown Opcode");
         }
+
+        if (_awaitingInput)
+          return _intCode;
       }
 
       return _intCode;
+    }
+    
+    public void ResumeExecution()
+    {
+      if (_awaitingInput)
+      {
+        _awaitingInput = false;
+        Execute();
+      }
     }
 
     private void Add(Instruction i)
@@ -116,17 +138,24 @@ namespace IntCode
 
     private void Read(Instruction i)
     {
-      Console.Write("\n please enter a diagnostic code and press enter:  ");
-      var value = long.Parse(Console.ReadLine());
+      //Console.Write("\n please enter a diagnostic code and press enter:  ");
+      //var value = long.Parse(Console.ReadLine());
 
-      if (i.p1ParamMode == ParamMode.Ref)
-        _memory[_intCode[_iPtr + 1]] = value;
-      else if (i.p1ParamMode == ParamMode.Val)
-        _memory[_iPtr + 1] = value;
+      if (_inputQueue.Count != 0)
+      {
+        var value = (int)_inputQueue.Dequeue();
+
+        if (i.p1ParamMode == ParamMode.Ref)
+          _memory[_intCode[_iPtr + 1]] = value;
+        else if (i.p1ParamMode == ParamMode.Val)
+          _memory[_iPtr + 1] = value;
+        else
+          _memory[_intCode[_iPtr + 1] + _relBase] = value;
+
+        _iPtr += 2;
+      }
       else
-        _memory[_intCode[_iPtr + 1] + _relBase] = value;
-
-      _iPtr += 2;
+        _awaitingInput = true;
     }
 
     private void Write(Instruction i)
@@ -140,7 +169,8 @@ namespace IntCode
       else
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
 
-      Console.WriteLine("\n value :  {0}", p1);
+      //Console.WriteLine("\n value :  {0}", p1);
+      _outputQueue.Enqueue(p1);
 
       _iPtr += 2;
     }
