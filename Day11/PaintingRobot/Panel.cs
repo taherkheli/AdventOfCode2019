@@ -23,5 +23,10 @@ namespace PaintingRobot
     public Directions Direction => _direction;
     public Colors Color => _color;
     public Position Position => _position;
+
+    internal void Paint(Colors color)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

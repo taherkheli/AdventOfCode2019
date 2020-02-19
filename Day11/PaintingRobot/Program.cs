@@ -10,30 +10,8 @@ namespace PaintingRobot
     {
       string path = "input.txt";
       Robot robot = new Robot(LoadInput(path), 10);
-      robot.Executor.InputQueue.Enqueue(0);
-      robot.Executor.Execute();
 
-      Colors color = Colors.Black;
-      Directions direction = Directions.Up;
-
-      if ((long)robot.Executor.OutputQueue.Dequeue() == 1)
-        color = Colors.White;
-
-      if ((long)robot.Executor.OutputQueue.Dequeue() == 0)
-        direction = Directions.Left;
-      else
-        direction = Directions.Right;
-
-      robot.Executor.InputQueue.Enqueue(0);
-      robot.Executor.ResumeExecution();
-
-      if ((long)robot.Executor.OutputQueue.Dequeue() == 1)
-        color = Colors.White;
-
-      if ((long)robot.Executor.OutputQueue.Dequeue() == 0)
-        direction = Directions.Left;
-      else
-        direction = Directions.Right;
+      robot.Go();
 
     }
 
