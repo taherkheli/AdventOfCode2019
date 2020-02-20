@@ -47,23 +47,26 @@ namespace PaintingRobot
         out1 = (long)_executor.OutputQueue.Dequeue();
         out2 = (long)_executor.OutputQueue.Dequeue();
 
-        //Paint
-        if (out1 == 0)
-          color = Colors.Black;
-        else  //1
-          color = Colors.White;
+        if (_executor.AwaitingInput == true)  //intCode has not exited yet 
+        {
+          //Paint
+          if (out1 == 0)
+            color = Colors.Black;
+          else  //1
+            color = Colors.White;
 
-        _grid.CurrentPanel.Paint(color);
+          _grid.CurrentPanel.Paint(color);
 
-        //Move
-        if (out2 == 0)
-          direction = Directions.Left;
+          //Move
+          if (out2 == 0)
+            direction = Directions.Left;
+          else
+            direction = Directions.Right;
+
+          _grid.Move(direction);
+
+        }
         else
-          direction = Directions.Right;
-
-        _grid.Move(direction);
-
-        if (_executor.AwaitingInput == false)
           break;       
       }
     }
