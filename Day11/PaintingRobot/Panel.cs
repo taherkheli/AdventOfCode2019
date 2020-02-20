@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PaintingRobot
+﻿namespace PaintingRobot
 {
   public class Panel
   {
-    private bool _isPainted;
-    private Directions _direction;
+    private int _paintCount;
     private Colors _color;
+    private Directions _direction;
     private Position _position;
 
     public Panel(Position position)
     {
-      _isPainted = false;
-      _direction = Directions.Up;
+      _paintCount = 0;
       _color = Colors.Black;
       _position = position;
     }
 
-    public bool IsPainted => _isPainted;
-    public Directions Direction => _direction;
-    public Colors Color => _color;
-    public Position Position => _position;
+    public int PaintCount { get => _paintCount; }
+    public Colors Color { get => _color; set => _color = value; }
+    public Directions Direction { get => _direction; set => _direction = value; }
+    public Position Position { get => _position; set => _position = value; }
 
     internal void Paint(Colors color)
     {
-      throw new NotImplementedException();
+      _color = color;
+      _paintCount++;
     }
   }
 }

@@ -1,5 +1,4 @@
-﻿using IntCode;
-using System;
+﻿using System;
 using System.IO;
 
 namespace PaintingRobot
@@ -9,10 +8,9 @@ namespace PaintingRobot
     static void Main()
     {
       string path = "input.txt";
-      Robot robot = new Robot(LoadInput(path), 10);
-
+      Robot robot = new Robot(LoadInput(path), 2500);
       robot.Go();
-
+      Console.WriteLine(robot.Grid.PaintedPanels); 
     }
 
     private static long[] LoadInput(string path)
