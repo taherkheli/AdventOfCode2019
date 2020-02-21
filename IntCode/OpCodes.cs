@@ -2,15 +2,15 @@
 {
   public enum Opcodes
   {
-    Add,
-    Multiply,
-    Read,
-    Write,
-    JumpIfTrue,
-    JumpIfFalse,
-    LessThan,
-    Equals,
-    RelativeBaseOffset,
-    Exit
+    Add,                 //01
+    Multiply,            //02
+    Read,                //03
+    Write,               //04
+    JumpIfTrue,          //05
+    JumpIfFalse,         //06
+    LessThan,            //07
+    Equals,              //08
+    RelativeBaseOffset,  //09
+    Exit                 //99
   }
 }

@@ -13,9 +13,9 @@ namespace IntCodeTest
 			var expected = new Instruction
 			{
 				OpCode = Opcodes.Multiply,
-				p1ParamMode = ParamMode.Ref,
-				p2ParamMode = ParamMode.Val,
-				p3ParamMode = ParamMode.Ref
+				p1ParamMode = ParamMode.Reference,
+				p2ParamMode = ParamMode.Value,
+				p3ParamMode = ParamMode.Reference
 			};
 
 			var actual = IntCode.InstDecoder.Decode(input);
@@ -30,7 +30,9 @@ namespace IntCodeTest
 			var expected = new Instruction
 			{
 				OpCode = Opcodes.RelativeBaseOffset,
-				p1ParamMode = ParamMode.Val
+				p1ParamMode = ParamMode.Value,
+				p2ParamMode = ParamMode.NA,
+				p3ParamMode = ParamMode.NA
 			};
 
 			var actual = IntCode.InstDecoder.Decode(input);
@@ -45,7 +47,9 @@ namespace IntCodeTest
 			var expected = new Instruction
 			{
 				OpCode = Opcodes.Write,
-				p1ParamMode = ParamMode.Rel
+				p1ParamMode = ParamMode.Relative,
+				p2ParamMode = ParamMode.NA,
+				p3ParamMode = ParamMode.NA
 			};
 
 			var actual = IntCode.InstDecoder.Decode(input);
@@ -60,7 +64,9 @@ namespace IntCodeTest
 			var expected = new Instruction
 			{
 				OpCode = Opcodes.Read,
-				p1ParamMode = ParamMode.Rel
+				p1ParamMode = ParamMode.Relative,
+				p2ParamMode = ParamMode.NA,
+				p3ParamMode = ParamMode.NA
 			};
 
 			var actual = IntCode.InstDecoder.Decode(input);

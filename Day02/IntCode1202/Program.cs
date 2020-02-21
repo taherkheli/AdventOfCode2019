@@ -11,13 +11,14 @@ namespace IntCode1202
       string path = "input.txt";
       Executor executor = new Executor(LoadInput(path));
       executor.Execute();
-      Console.WriteLine("\nPart I: The item in position 0 after intcode execution was: {0}", executor.IntCode[0]);               
+      Console.WriteLine("\nPart I: The item in position 0 after intcode execution was: {0}", executor.IntCode[0]);    
+
+      /************* Part II ******************/
 
       int magicNumber = 19690720;
       long verb = 0;
       long noun = 0;
       bool success = false;
-      executor = new Executor(LoadInput(path));
 
       for (int i = 0; i < 100; i++)
       {

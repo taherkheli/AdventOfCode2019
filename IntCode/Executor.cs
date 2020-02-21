@@ -82,7 +82,7 @@ namespace IntCode
             keepGoing = false;
             break;
           default:
-            _iPtr = 0;  //reset
+            _iPtr = 0;  
             throw new InvalidOperationException("Unknown Opcode");
         }
 
@@ -109,7 +109,7 @@ namespace IntCode
       p1 = t.Item1;
       p2 = t.Item2;
 
-      if (i.p3ParamMode == ParamMode.Ref)
+      if (i.p3ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 3];
 
@@ -119,7 +119,7 @@ namespace IntCode
           _intCode[index] = p1 + p2;
       }
 
-      else if (i.p3ParamMode == ParamMode.Val)
+      else if (i.p3ParamMode == ParamMode.Value)
         _intCode[_intCode[_iPtr + 3]] = p1 + p2;
       
       else
@@ -138,7 +138,7 @@ namespace IntCode
       p1 = t.Item1;
       p2 = t.Item2;
 
-      if (i.p3ParamMode == ParamMode.Ref)
+      if (i.p3ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 3];
 
@@ -148,7 +148,7 @@ namespace IntCode
           _intCode[index] = p1 * p2;
       }  
 
-      else if (i.p3ParamMode == ParamMode.Val)
+      else if (i.p3ParamMode == ParamMode.Value)
         _intCode[_iPtr + 3] = p1 * p2;
 
       else
@@ -169,10 +169,10 @@ namespace IntCode
       {
         var value = (int)_inputQueue.Dequeue();
 
-        if (i.p1ParamMode == ParamMode.Ref)
+        if (i.p1ParamMode == ParamMode.Reference)
           _intCode[_intCode[_iPtr + 1]] = value;
 
-        else if (i.p1ParamMode == ParamMode.Val)
+        else if (i.p1ParamMode == ParamMode.Value)
           _intCode[_iPtr + 1] = value;
         
         else
@@ -191,9 +191,9 @@ namespace IntCode
     {
       long p1;
 
-      if (i.p1ParamMode == ParamMode.Ref)
+      if (i.p1ParamMode == ParamMode.Reference)
         p1 = _intCode[_intCode[_iPtr + 1]];
-      else if (i.p1ParamMode == ParamMode.Val)
+      else if (i.p1ParamMode == ParamMode.Value)
         p1 = _intCode[_iPtr + 1];
       else
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
@@ -238,7 +238,7 @@ namespace IntCode
       p2 = t.Item2;
       long val = ((p1 < p2) ? 1 : 0);
 
-      if (i.p3ParamMode == ParamMode.Ref)
+      if (i.p3ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 3];
 
@@ -248,7 +248,7 @@ namespace IntCode
           _intCode[index] = val;
       }
 
-      else if (i.p3ParamMode == ParamMode.Val)
+      else if (i.p3ParamMode == ParamMode.Value)
         _intCode[_iPtr + 3] = val;     
 
       else
@@ -268,7 +268,7 @@ namespace IntCode
       p2 = t.Item2;
       long val = ((p1 == p2) ? 1 : 0);
                
-      if (i.p3ParamMode == ParamMode.Ref)
+      if (i.p3ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 3];
         
@@ -278,7 +278,7 @@ namespace IntCode
           _intCode[index] = val;
       }
 
-      else if (i.p3ParamMode == ParamMode.Val)
+      else if (i.p3ParamMode == ParamMode.Value)
         _intCode[_iPtr + 3] = val;
 
       else
@@ -294,7 +294,7 @@ namespace IntCode
     {
       long p1;
       
-      if (i.p1ParamMode == ParamMode.Ref)
+      if (i.p1ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 1];
 
@@ -304,7 +304,7 @@ namespace IntCode
           p1 = _intCode[index];
       }
 
-      else if (i.p1ParamMode == ParamMode.Val)
+      else if (i.p1ParamMode == ParamMode.Value)
         p1 = _intCode[_iPtr + 1];
 
       else  //Param.Rel
@@ -319,7 +319,7 @@ namespace IntCode
     {
       long p1, p2;
                
-      if (i.p1ParamMode == ParamMode.Ref)
+      if (i.p1ParamMode == ParamMode.Reference)
       {
         var index = _intCode[_iPtr + 1];
 
@@ -329,16 +329,16 @@ namespace IntCode
           p1 = _intCode[index];
       }
 
-      else if (i.p1ParamMode == ParamMode.Val)
+      else if (i.p1ParamMode == ParamMode.Value)
         p1 = _intCode[_iPtr + 1];
 
       else //Param.Rel
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
 
-      if (i.p2ParamMode == ParamMode.Ref)
+      if (i.p2ParamMode == ParamMode.Reference)
         p2 = _intCode[_intCode[_iPtr + 2]];
 
-      else if (i.p2ParamMode == ParamMode.Val)
+      else if (i.p2ParamMode == ParamMode.Value)
         p2 = _intCode[_iPtr + 2];
 
       else

@@ -2,8 +2,9 @@
 {
   public enum ParamMode
   {
-    Ref,  //position 
-    Val,  //immediate 
-    Rel   //relative
+    Reference,  //position 
+    Value,      //immediate 
+    Relative,   //relative
+    NA          //N/A
   }
 }
