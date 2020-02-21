@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Day10", "Day10", "{BFE6B6B9-F61F-4104-B4FB-432C58D4EF64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutor", "Day09\IntCodeExecutioner\IntCodeExecutor.csproj", "{C7B85A14-8E98-4195-9E02-6132483E8A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SensorBoost", "Day09\SensorBoost\SensorBoost.csproj", "{C7B85A14-8E98-4195-9E02-6132483E8A97}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Day09", "Day09", "{6B7215DE-08DB-4F60-B74E-77FA0443F20D}"
 EndProject

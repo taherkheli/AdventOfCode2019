@@ -111,18 +111,21 @@ namespace IntCode
 
       if (i.p3ParamMode == ParamMode.Ref)
       {
-        //_memory[_intCode[_iPtr + 3]] = p1 + p2;
-        _intCode[_intCode[_iPtr + 3]] = p1 + p2;
+        var index = _intCode[_iPtr + 3];
+
+        if (index > _intCodeLen)
+          _memory[index] = p1 + p2;
+        else
+          _intCode[index] = p1 + p2;
       }
+
       else if (i.p3ParamMode == ParamMode.Val)
-      {
-        _memory[_iPtr + 3] = p1 + p2;
         _intCode[_intCode[_iPtr + 3]] = p1 + p2;
-      }
+      
       else
       {
         _memory[_intCode[_iPtr + 3] + _relBase] = p1 + p2;
-        _intCode[_intCode[_iPtr + 3] + _relBase] = p1 + p2;
+        //_intCode[_intCode[_iPtr + 3] + _relBase] = p1 + p2;
       }
 
       _iPtr += 4;
@@ -137,18 +140,21 @@ namespace IntCode
 
       if (i.p3ParamMode == ParamMode.Ref)
       {
-        //_memory[_intCode[_iPtr + 3]] = p1 * p2;
-        _intCode[_intCode[_iPtr + 3]] = p1 * p2;
-      }
+        var index = _intCode[_iPtr + 3];
+
+        if (index > _intCodeLen)
+          _memory[index] = p1 * p2;
+        else
+          _intCode[index] = p1 * p2;
+      }  
+
       else if (i.p3ParamMode == ParamMode.Val)
-      {
-        _memory[_iPtr + 3] = p1 * p2;
         _intCode[_iPtr + 3] = p1 * p2;
-      }
+
       else
       {
         _memory[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
-        _intCode[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
+        //_intCode[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
       }
 
       _iPtr += 4;
@@ -164,27 +170,16 @@ namespace IntCode
         var value = (int)_inputQueue.Dequeue();
 
         if (i.p1ParamMode == ParamMode.Ref)
-        {
-          //_memory[_intCode[_iPtr + 1]] = value;
           _intCode[_intCode[_iPtr + 1]] = value;
-        }
+
         else if (i.p1ParamMode == ParamMode.Val)
-        {
-          //_memory[_iPtr + 1] = value;
           _intCode[_iPtr + 1] = value;
-        }
+        
         else
         {
-          //_memory[_intCode[_iPtr + 1] + _relBase] = value;
-          _intCode[_intCode[_iPtr + 1] + _relBase] = value;
+          _memory[_intCode[_iPtr + 1] + _relBase] = value;
+          //_intCode[_intCode[_iPtr + 1] + _relBase] = value;
         }
-
-        //if (i.p1ParamMode == ParamMode.Ref)
-        //  _memory[_intCode[_iPtr + 1]] = value;
-        //else if (i.p1ParamMode == ParamMode.Val)
-        //  _memory[_iPtr + 1] = value;
-        //else
-        //  _memory[_intCode[_iPtr + 1] + _relBase] = value;
 
         _iPtr += 2;
       }
@@ -245,20 +240,21 @@ namespace IntCode
 
       if (i.p3ParamMode == ParamMode.Ref)
       {
-        _memory[_intCode[_iPtr + 3]] = val;
-        _intCode[_intCode[_iPtr + 3]] = val;
+        var index = _intCode[_iPtr + 3];
+
+        if (index > _intCodeLen)
+          _memory[index] = val;
+        else
+          _intCode[index] = val;
       }
 
       else if (i.p3ParamMode == ParamMode.Val)
-      {
-        _memory[_iPtr + 3] = val;
-        _intCode[_iPtr + 3] = val;
-      }
+        _intCode[_iPtr + 3] = val;     
 
       else
       {
         _memory[_intCode[_iPtr + 3] + _relBase] = val;
-        _intCode[_intCode[_iPtr + 3] + _relBase] = val;
+        //_intCode[_intCode[_iPtr + 3] + _relBase] = val;
       }
 
       _iPtr += 4;
@@ -271,21 +267,24 @@ namespace IntCode
       p1 = t.Item1;
       p2 = t.Item2;
       long val = ((p1 == p2) ? 1 : 0);
-
+               
       if (i.p3ParamMode == ParamMode.Ref)
       {
-        _memory[_intCode[_iPtr + 3]] = val;
-        _intCode[_intCode[_iPtr + 3]] = val;
+        var index = _intCode[_iPtr + 3];
+        
+        if (index > _intCodeLen)
+          _memory[index] = val;
+        else
+          _intCode[index] = val;
       }
+
       else if (i.p3ParamMode == ParamMode.Val)
-      {
-        _memory[_iPtr + 3] = val;
         _intCode[_iPtr + 3] = val;
-      }
+
       else
       {
         _memory[_intCode[_iPtr + 3] + _relBase] = val;
-        _intCode[_intCode[_iPtr + 3] + _relBase] = val;
+        //_intCode[_intCode[_iPtr + 3] + _relBase] = val;
       }  
 
       _iPtr += 4;
@@ -294,11 +293,20 @@ namespace IntCode
     private void RelativeBaseOffset(Instruction i)
     {
       long p1;
-
+      
       if (i.p1ParamMode == ParamMode.Ref)
-        p1 = _intCode[_intCode[_iPtr + 1]];
+      {
+        var index = _intCode[_iPtr + 1];
+
+        if (index > _intCodeLen)
+          p1 = _memory[index];
+        else
+          p1 = _intCode[index];
+      }
+
       else if (i.p1ParamMode == ParamMode.Val)
         p1 = _intCode[_iPtr + 1];
+
       else  //Param.Rel
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
 
@@ -310,19 +318,29 @@ namespace IntCode
     private Tuple<long, long> GetParameters(Instruction i)
     {
       long p1, p2;
+               
+      if (i.p1ParamMode == ParamMode.Ref)
+      {
+        var index = _intCode[_iPtr + 1];
 
-      if (i.p1ParamMode == ParamMode.Ref)    
-        p1 = _intCode[_intCode[_iPtr + 1]];
-      
+        if (index > _intCodeLen)
+          p1 = _memory[index];
+        else
+          p1 = _intCode[index];
+      }
+
       else if (i.p1ParamMode == ParamMode.Val)
         p1 = _intCode[_iPtr + 1];
+
       else //Param.Rel
         p1 = _memory[_intCode[_iPtr + 1] + _relBase];
 
       if (i.p2ParamMode == ParamMode.Ref)
         p2 = _intCode[_intCode[_iPtr + 2]];
+
       else if (i.p2ParamMode == ParamMode.Val)
         p2 = _intCode[_iPtr + 2];
+
       else
         p2 = _memory[_intCode[_iPtr + 2] + _relBase];
 

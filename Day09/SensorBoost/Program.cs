@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace DiagnosticCode
+namespace Day09
 {
   class Program
   {
