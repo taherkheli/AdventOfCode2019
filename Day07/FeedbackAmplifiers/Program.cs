@@ -1,27 +1,27 @@
 ﻿using System;
 using System.IO;
 
-namespace IntCodeExecutorPartII
+namespace FeedbackAmplifiers
   {
   class Program
   {
     static void Main()
     {
       string path = "input.txt";
-      int[] program = LoadInput(path);
+      long[] program = LoadInput(path);
       int[] sequence = new int[5] { 9, 8, 7, 6, 5 };
-      int highest = Helpers.GetHighest(program, sequence);
+      long highest = Helpers.GetHighest(program, sequence);
       Console.WriteLine("\n strongest signal value :  {0}", highest);
     }
 
-    private static int[] LoadInput(string path)
+    private static long[] LoadInput(string path)
     {
       StreamReader file = new StreamReader(path);
       string[] strings = file.ReadToEnd().Split(',');
-      int[] result = new int[strings.Length];
+      long[] result = new long[strings.Length];
 
       for (int i = 0; i < result.Length; i++)
-        result[i] = int.Parse(strings[i]);
+        result[i] = long.Parse(strings[i]);
 
       return result;
     }

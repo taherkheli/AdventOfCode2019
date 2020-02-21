@@ -167,7 +167,8 @@ namespace IntCode
 
       if (_inputQueue.Count != 0)
       {
-        var value = (int)_inputQueue.Dequeue();
+        //TODO: a bit inconsistent that everything else is long but this is int
+        var value = (long)_inputQueue.Dequeue();
 
         if (i.p1ParamMode == ParamMode.Reference)
           _intCode[_intCode[_iPtr + 1]] = value;

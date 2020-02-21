@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IntCodeExecutorPartII
+namespace FeedbackAmplifiers
 {
   public static class InstDecoder
   {

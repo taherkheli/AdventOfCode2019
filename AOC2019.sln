@@ -33,9 +33,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Day02", "Day02", "{C6A9D9D3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutor", "Day07\IntCodeExecutor\IntCodeExecutor.csproj", "{F818C8FA-F27F-4401-B774-B4756937350D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutorPartII", "Day07\IntCodeExecutorPartII\IntCodeExecutorPartII.csproj", "{62DB082B-1294-4DA6-93D1-BFE6141A16A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackAmplifiers", "Day07\FeedbackAmplifiers\FeedbackAmplifiers.csproj", "{62DB082B-1294-4DA6-93D1-BFE6141A16A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutorPartIITest", "Day07\IntCodeExecutorPartIITest\IntCodeExecutorPartIITest.csproj", "{52A364F3-4D1E-4304-932C-0FD0633044B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedbackAmplifiersTest", "Day07\FeedbackAmplifiersTest\FeedbackAmplifiersTest.csproj", "{52A364F3-4D1E-4304-932C-0FD0633044B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeExecutorTest", "Day07\IntCodeExecutorTest\IntCodeExecutorTest.csproj", "{F9C166DF-ECE3-462A-B01D-400818877FFB}"
 EndProject

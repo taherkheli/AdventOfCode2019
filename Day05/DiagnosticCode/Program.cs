@@ -12,13 +12,13 @@ namespace Day09
       var input = LoadInput(path);
       
       Executor executor = new Executor(input);
-      executor.InputQueue.Enqueue(1);
+      executor.InputQueue.Enqueue((long)1);
       executor.Execute();
       while (executor.OutputQueue.Count > 0)
         Console.WriteLine("\nPart I: Executor returned: {0}", (long)executor.OutputQueue.Dequeue());
 
       executor.Initialize();
-      executor.InputQueue.Enqueue(5);
+      executor.InputQueue.Enqueue((long)5);
       executor.Execute();
       while (executor.OutputQueue.Count > 0)
         Console.WriteLine("\nPart II: Executor returned: {0}", (long)executor.OutputQueue.Dequeue());

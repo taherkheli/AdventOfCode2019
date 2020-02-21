@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IntCodeExecutorPartII
+namespace FeedbackAmplifiers
 {
   public class IntCodeExecutor
   {

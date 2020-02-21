@@ -1,4 +1,4 @@
-﻿namespace IntCodeExecutorPartII
+﻿namespace FeedbackAmplifiers
 {
   public enum Opcodes
   {
