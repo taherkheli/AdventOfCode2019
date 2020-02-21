@@ -9,19 +9,21 @@ namespace DiagnosticCode
     static void Main()
     {
       string path = "input.txt";
-      Executor executor = new Executor(LoadInput(path));
-      executor.Initialize();
+      var input = LoadInput(path);
+      
+      Executor executor = new Executor(input);
       executor.InputQueue.Enqueue(1);
       executor.Execute();
-      Console.WriteLine("\nPart I :  {0}", (long)executor.OutputQueue.Dequeue());
-
-      //reload intcode
+      while (executor.OutputQueue.Count > 0)
+        Console.WriteLine("\nPart I: Executor returned: {0}", (long)executor.OutputQueue.Dequeue()); 
+            
       executor = new Executor(LoadInput(path));
-      executor.InputQueue.Enqueue(2);
+      executor.InputQueue.Enqueue(5);
       executor.Execute();
-      Console.WriteLine("\nPart II :  {0}", (long)executor.OutputQueue.Dequeue());
+      while (executor.OutputQueue.Count > 0)
+        Console.WriteLine("\nPart II: Executor returned: {0}", (long)executor.OutputQueue.Dequeue());
     }
-
+    
     private static long[] LoadInput(string path)
     {
       StreamReader file = new StreamReader(path);

@@ -5,6 +5,8 @@
     <RootNamespace>IntCodeExecutorPartI.Test</RootNamespace>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>IntCode1202.Test</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntCodeExecutorPartI\IntCodeExecutorPartI.csproj" />
+    <ProjectReference Include="..\IntCode1202\IntCode1202.csproj" />
   </ItemGroup>
 
 </Project>
