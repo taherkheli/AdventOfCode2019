@@ -15,15 +15,15 @@ namespace IntCodeTest
       long expected2 = 1;
       long expected3 = 0;
 
-      executor.InputQueue.Enqueue(7);
+      executor.InputQueue.Enqueue((long)7);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(15);
+      executor.InputQueue.Enqueue((long)15);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -41,15 +41,15 @@ namespace IntCodeTest
       long expected2 = 1;
       long expected3 = 0;
 
-      executor.InputQueue.Enqueue(3);
+      executor.InputQueue.Enqueue((long)3);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(9);
+      executor.InputQueue.Enqueue((long)9);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -67,15 +67,15 @@ namespace IntCodeTest
       long expected2 = 0;
       long expected3 = 0;
 
-      executor.InputQueue.Enqueue(7);
+      executor.InputQueue.Enqueue((long)7);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(11);
+      executor.InputQueue.Enqueue((long)11);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -93,15 +93,15 @@ namespace IntCodeTest
       long expected2 = 0;
       long expected3 = 0;
 
-      executor.InputQueue.Enqueue(7);
+      executor.InputQueue.Enqueue((long)7);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(11);
+      executor.InputQueue.Enqueue((long)11);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -119,15 +119,15 @@ namespace IntCodeTest
       long expected2 = 1;
       long expected3 = 1;
 
-      executor.InputQueue.Enqueue(0);
+      executor.InputQueue.Enqueue((long)0);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(1);
+      executor.InputQueue.Enqueue((long)1);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(9);
+      executor.InputQueue.Enqueue((long)9);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -145,15 +145,15 @@ namespace IntCodeTest
       long expected2 = 0;
       long expected3 = 1;
 
-      executor.InputQueue.Enqueue(-1);
+      executor.InputQueue.Enqueue((long)-1);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(0);
+      executor.InputQueue.Enqueue((long)0);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 
@@ -173,15 +173,15 @@ namespace IntCodeTest
       long expected2 = 1000;
       long expected3 = 1001;
 
-      executor.InputQueue.Enqueue(-3);
+      executor.InputQueue.Enqueue((long)-3);
       executor.Execute();
       var actual1 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(8);
+      executor.InputQueue.Enqueue((long)8);
       executor.Execute();
       var actual2 = (long)executor.OutputQueue.Dequeue();
       executor.Initialize();
-      executor.InputQueue.Enqueue(15);
+      executor.InputQueue.Enqueue((long)15);
       executor.Execute();
       var actual3 = (long)executor.OutputQueue.Dequeue();
 

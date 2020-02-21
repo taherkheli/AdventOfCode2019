@@ -1,7 +1,7 @@
 using FeedbackAmplifiers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IntCodeExecutorPartIITest
+namespace Part2Test
 {
   [TestClass]
   public class PartII
