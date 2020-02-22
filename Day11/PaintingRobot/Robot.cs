@@ -35,9 +35,9 @@ namespace PaintingRobot
         Console.WriteLine("Loop #: {0}", ++count);
 
         if (_grid.CurrentPanel.Color == Colors.Black)
-          _executor.InputQueue.Enqueue(0);
+          _executor.InputQueue.Enqueue((long)0);
         else  //White 
-          _executor.InputQueue.Enqueue(1);
+          _executor.InputQueue.Enqueue((long)1);
 
         if (_executor.AwaitingInput)
           _executor.ResumeExecution();

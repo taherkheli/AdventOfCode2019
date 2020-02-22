@@ -11,17 +11,16 @@ namespace FeedbackAmplifiers
 
 			string path = "input.txt";
 			long[] program = LoadInput(path);
-			int[] sequence = new int[5] { 1, 0, 4, 3, 2 };
+			long[] sequence = new long[5] { 1, 0, 4, 3, 2 };
 			long highest = -1;
-			highest = Helpers.GetHighestPartI(program, sequence);
-
+			highest = Helpers.GetHighest(program, sequence, 1);
 			Console.WriteLine("\n strongest signal value :  {0}", highest);
 
 			/********** Part II ************/
 
-			sequence = new int[5] { 9, 8, 7, 6, 5 };
+			sequence = new long[5] { 9, 8, 7, 6, 5 };
 			highest = -1;
-			highest = Helpers.GetHighest(program, sequence);
+			highest = Helpers.GetHighest(program, sequence, 2);
 			Console.WriteLine("\n strongest signal value :  {0}", highest);
 		}
 

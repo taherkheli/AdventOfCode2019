@@ -10,7 +10,6 @@ namespace Day09
     {
       string path = "input.txt";
       Executor executor = new Executor(LoadInput(path));
-      executor.Initialize();
       executor.InputQueue.Enqueue((long)1);
       executor.Execute();
       Console.WriteLine("\nPart I :  {0}", (long)executor.OutputQueue.Dequeue());
