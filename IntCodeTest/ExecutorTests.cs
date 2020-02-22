@@ -200,5 +200,27 @@ namespace IntCodeTest
 
       CollectionAssert.AreEqual(expected, actual, "OK!");
     }
+
+    [TestMethod]
+    public void D9_TC2_ShouldProduce_16_DigitNumber()
+    {
+      var intCode = new long[] { 1102, 34915192, 34915192, 7, 4, 7, 99, 0 };
+      long expected = 1219070632396864;
+      var executor = new Executor(intCode);
+      executor.Execute();
+      var actual = (long)executor.OutputQueue.Dequeue();
+      Assert.AreEqual<long>(expected, actual, "OK!");
+    }
+
+    [TestMethod]
+    public void D9_TC3_ShouldOutputLargeNumber()
+    {
+      var intCode = new long[] { 104, 1125899906842624, 99 };
+      long expected = 1125899906842624;   
+      var executor = new Executor(intCode);
+      executor.Execute();
+      var actual = (long)executor.OutputQueue.Dequeue();
+      Assert.AreEqual<long>(expected, actual, "OK!");
+    }
   }
 }
