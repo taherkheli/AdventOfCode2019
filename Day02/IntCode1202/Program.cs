@@ -11,7 +11,7 @@ namespace IntCode1202
       string path = "input.txt";
       Executor executor = new Executor(LoadInput(path));
       executor.Execute();
-      Console.WriteLine("\nPart I: The item in position 0 after intcode execution was: {0}", executor.IntCode[0]);    
+      Console.WriteLine("\nPart I: The item in position 0 after intcode execution was: {0}", executor.Memory[0]);    
 
       /************* Part II ******************/
 
@@ -25,17 +25,17 @@ namespace IntCode1202
         for (int j = 0; j < 100; j++)
         {
           executor.Initialize();
-          executor.IntCode[1] = i;
-          executor.IntCode[2] = j;
+          executor.Memory[1] = i;
+          executor.Memory[2] = j;
           executor.Execute();
-          if (executor.IntCode[0] == magicNumber)
+          if (executor.Memory[0] == magicNumber)
             break;
         }
 
-        if (executor.IntCode[0] == magicNumber)
+        if (executor.Memory[0] == magicNumber)
         {
-          noun = executor.IntCode[1];
-          verb = executor.IntCode[2];
+          noun = executor.Memory[1];
+          verb = executor.Memory[2];
           success = true;
           break;
         }

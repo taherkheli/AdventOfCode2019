@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace IntCode
 {
   public class Executor
   {
     private long _iPtr;
-    private long[] _intCode;
+    private long[] _intCode;   //only to keep a local copy of the provided intCode. Used for resetting!
     private long _relBase;                  //relative base for supporting relative mode parameters
     private readonly long _intCodeLen;
-    private readonly long[] _memory;
+    private long[] _memory;
     private Queue _inputQueue;
     private Queue _outputQueue;
     private bool _awaitingInput;
 
-    public long[] IntCode { get => _intCode; set => _intCode = value; }
     public Queue InputQueue { get => _inputQueue; set => _inputQueue = value; }
+
     public Queue OutputQueue { get => _outputQueue; set => _outputQueue = value; }
+
     public bool AwaitingInput => _awaitingInput;
+
+    public long[] Memory { get => _memory; set => _memory = value; }
 
     public Executor(long[] intCode)
     {
@@ -36,7 +40,7 @@ namespace IntCode
     public void Initialize()
     {
       //reload ROM without doing anything at all to RAM
-      Array.Copy(_memory, _intCode, _intCodeLen);
+      Array.Copy(_intCode, _memory, _intCodeLen);
       _iPtr = 0;
     }
 
@@ -46,7 +50,7 @@ namespace IntCode
 
       while (keepGoing)
       {
-        var instruction = InstDecoder.Decode(_intCode[_iPtr]);
+        var instruction = InstDecoder.Decode(_memory[_iPtr]);
 
         switch (instruction.OpCode)
         {
@@ -87,10 +91,10 @@ namespace IntCode
         }
 
         if (_awaitingInput)
-          return _intCode;
+          return _memory.Take(Convert.ToInt32(_intCodeLen)).ToArray();
       }
 
-      return _intCode;
+      return _memory.Take(Convert.ToInt32(_intCodeLen)).ToArray();
     }
 
     public void ResumeExecution()
@@ -110,23 +114,13 @@ namespace IntCode
       p2 = t.Item2;
 
       if (i.p3ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 3];
-
-        if (index > _intCodeLen)
-          _memory[index] = p1 + p2;
-        else
-          _intCode[index] = p1 + p2;
-      }
+        _memory[_memory[_iPtr + 3]] = p1 + p2;
 
       else if (i.p3ParamMode == ParamMode.Value)
-        _intCode[_intCode[_iPtr + 3]] = p1 + p2;
+        _memory[_memory[_iPtr + 3]] = p1 + p2;
       
       else
-      {
-        _memory[_intCode[_iPtr + 3] + _relBase] = p1 + p2;
-        //_intCode[_intCode[_iPtr + 3] + _relBase] = p1 + p2;
-      }
+        _memory[_memory[_iPtr + 3] + _relBase] = p1 + p2;
 
       _iPtr += 4;
     }
@@ -139,48 +133,31 @@ namespace IntCode
       p2 = t.Item2;
 
       if (i.p3ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 3];
-
-        if (index > _intCodeLen)
-          _memory[index] = p1 * p2;
-        else
-          _intCode[index] = p1 * p2;
-      }  
+        _memory[_memory[_iPtr + 3]] = p1 * p2;
 
       else if (i.p3ParamMode == ParamMode.Value)
-        _intCode[_iPtr + 3] = p1 * p2;
+        _memory[_iPtr + 3] = p1 * p2;
 
       else
-      {
-        _memory[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
-        //_intCode[_intCode[_iPtr + 3] + _relBase] = p1 * p2;
-      }
+        _memory[_memory[_iPtr + 3] + _relBase] = p1 * p2;
 
       _iPtr += 4;
     }
 
     private void Read(Instruction i)
     {
-      //Console.Write("\n please enter a diagnostic code and press enter:  ");
-      //var value = long.Parse(Console.ReadLine());
-
       if (_inputQueue.Count != 0)
       {
-        //TODO: a bit inconsistent that everything else is long but this is int
         var value = (long)_inputQueue.Dequeue();
 
         if (i.p1ParamMode == ParamMode.Reference)
-          _intCode[_intCode[_iPtr + 1]] = value;
+          _memory[_memory[_iPtr + 1]] = value;
 
         else if (i.p1ParamMode == ParamMode.Value)
-          _intCode[_iPtr + 1] = value;
+          _memory[_iPtr + 1] = value;
         
         else
-        {
-          _memory[_intCode[_iPtr + 1] + _relBase] = value;
-          //_intCode[_intCode[_iPtr + 1] + _relBase] = value;
-        }
+          _memory[_memory[_iPtr + 1] + _relBase] = value;
 
         _iPtr += 2;
       }
@@ -193,15 +170,15 @@ namespace IntCode
       long p1;
 
       if (i.p1ParamMode == ParamMode.Reference)
-        p1 = _intCode[_intCode[_iPtr + 1]];
+        p1 = _memory[_memory[_iPtr + 1]];
+
       else if (i.p1ParamMode == ParamMode.Value)
-        p1 = _intCode[_iPtr + 1];
+        p1 = _memory[_iPtr + 1];
+
       else
-        p1 = _memory[_intCode[_iPtr + 1] + _relBase];
+        p1 = _memory[_memory[_iPtr + 1] + _relBase];
 
-      //Console.WriteLine("\n value :  {0}", p1);
       _outputQueue.Enqueue(p1);
-
       _iPtr += 2;
     }
 
@@ -240,23 +217,13 @@ namespace IntCode
       long val = ((p1 < p2) ? 1 : 0);
 
       if (i.p3ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 3];
-
-        if (index > _intCodeLen)
-          _memory[index] = val;
-        else
-          _intCode[index] = val;
-      }
+        _memory[_memory[_iPtr + 3]] = val;
 
       else if (i.p3ParamMode == ParamMode.Value)
-        _intCode[_iPtr + 3] = val;     
+        _memory[_iPtr + 3] = val;     
 
       else
-      {
-        _memory[_intCode[_iPtr + 3] + _relBase] = val;
-        //_intCode[_intCode[_iPtr + 3] + _relBase] = val;
-      }
+        _memory[_memory[_iPtr + 3] + _relBase] = val;
 
       _iPtr += 4;
     }
@@ -270,24 +237,14 @@ namespace IntCode
       long val = ((p1 == p2) ? 1 : 0);
                
       if (i.p3ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 3];
-        
-        if (index > _intCodeLen)
-          _memory[index] = val;
-        else
-          _intCode[index] = val;
-      }
+        _memory[_memory[_iPtr + 3]] = val;
 
       else if (i.p3ParamMode == ParamMode.Value)
-        _intCode[_iPtr + 3] = val;
+        _memory[_iPtr + 3] = val;
 
       else
-      {
-        _memory[_intCode[_iPtr + 3] + _relBase] = val;
-        //_intCode[_intCode[_iPtr + 3] + _relBase] = val;
-      }  
-
+        _memory[_memory[_iPtr + 3] + _relBase] = val;
+      
       _iPtr += 4;
     }
 
@@ -296,20 +253,13 @@ namespace IntCode
       long p1;
       
       if (i.p1ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 1];
-
-        if (index > _intCodeLen)
-          p1 = _memory[index];
-        else
-          p1 = _intCode[index];
-      }
+        p1 = _memory[_memory[_iPtr + 1]];
 
       else if (i.p1ParamMode == ParamMode.Value)
-        p1 = _intCode[_iPtr + 1];
+        p1 = _memory[_iPtr + 1];
 
-      else  //Param.Rel
-        p1 = _memory[_intCode[_iPtr + 1] + _relBase];
+      else  
+        p1 = _memory[_memory[_iPtr + 1] + _relBase];
 
       _relBase += p1;  //update relative base
 
@@ -321,29 +271,22 @@ namespace IntCode
       long p1, p2;
                
       if (i.p1ParamMode == ParamMode.Reference)
-      {
-        var index = _intCode[_iPtr + 1];
-
-        if (index > _intCodeLen)
-          p1 = _memory[index];
-        else
-          p1 = _intCode[index];
-      }
+        p1 = _memory[_memory[_iPtr + 1]];
 
       else if (i.p1ParamMode == ParamMode.Value)
-        p1 = _intCode[_iPtr + 1];
+        p1 = _memory[_iPtr + 1];
 
-      else //Param.Rel
-        p1 = _memory[_intCode[_iPtr + 1] + _relBase];
+      else 
+        p1 = _memory[_memory[_iPtr + 1] + _relBase];
 
       if (i.p2ParamMode == ParamMode.Reference)
-        p2 = _intCode[_intCode[_iPtr + 2]];
+        p2 = _memory[_memory[_iPtr + 2]];
 
       else if (i.p2ParamMode == ParamMode.Value)
-        p2 = _intCode[_iPtr + 2];
+        p2 = _memory[_iPtr + 2];
 
       else
-        p2 = _memory[_intCode[_iPtr + 2] + _relBase];
+        p2 = _memory[_memory[_iPtr + 2] + _relBase];
 
       return Tuple.Create(p1, p2);
     }
