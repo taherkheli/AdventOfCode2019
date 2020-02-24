@@ -1,8 +1,5 @@
 ﻿using IntCode;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 
 namespace PaintingRobot
 {
@@ -64,7 +61,6 @@ namespace PaintingRobot
             direction = Directions.Right;
 
           _grid.Move(direction);
-
         }
         else
           break;       

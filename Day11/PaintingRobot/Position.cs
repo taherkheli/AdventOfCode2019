@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PaintingRobot
+﻿namespace PaintingRobot
 {
   public struct Position
   {

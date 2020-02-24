@@ -1,7 +1,4 @@
-﻿using IntCode;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace PaintingRobot
 {
@@ -37,7 +34,6 @@ namespace PaintingRobot
       _columns = size;
       _panels = new List<Panel>() { };
       Initialize();
-
     }
 
     private void Initialize()
@@ -54,15 +50,14 @@ namespace PaintingRobot
       //var position = new Position(_rows / 2, _columns / 2);
       var position = new Position( 2400, 2400);
 
-
       _currentPanel = _panels.Find(p => ((p.Position.X == position.X) && (p.Position.Y == position.Y)));
       _currentPanel.Direction = Directions.Up;
     }
 
     internal void Move(Directions direction)
     {
-      Directions newDirection = Directions.Up;
-      Position newPosition = new Position(0, 0);
+      Directions newDirection = Directions.Unknown;
+      Position newPosition = new Position(-1, -1);
 
       switch (_currentPanel.Direction)
       {
@@ -122,7 +117,7 @@ namespace PaintingRobot
       _currentPanel = _panels.Find(p => ((p.Position.X == newPosition.X) && (p.Position.Y == newPosition.Y)));
       _currentPanel.Direction = newDirection;
 
-      Console.WriteLine("Current Panal is now ->  X:{0}; Y:{1}; paintCount:{2}; Direction:'{3}'", _currentPanel.Position.X, _currentPanel.Position.Y,_currentPanel.PaintCount, _currentPanel.Direction);
+      //Console.WriteLine("Current Panel is now ->  X:{0}; Y:{1}; Direction:'{3}'", _currentPanel.Position.X, _currentPanel.Position.Y,_currentPanel.PaintCount, _currentPanel.Direction);
     }
   }
 }

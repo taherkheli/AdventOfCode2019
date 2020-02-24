@@ -12,6 +12,7 @@
       _paintCount = 0;
       _color = Colors.Black;
       _position = position;
+      _direction = Directions.Unknown;
     }
 
     public int PaintCount { get => _paintCount; }

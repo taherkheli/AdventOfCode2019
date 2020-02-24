@@ -12,7 +12,6 @@ namespace PaintingRobot
       robot.Go();
       Console.WriteLine(robot.Grid.PaintedPanels); 
     }
-
     private static long[] LoadInput(string path)
     {
       StreamReader file = new StreamReader(path);
