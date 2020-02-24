@@ -25,11 +25,13 @@ namespace PaintingRobot
       Directions direction;
       long out1, out2;
 
-      int count=0;
+      //int count=0;
 
       while (true)
-      {        
-        Console.WriteLine("Loop #: {0}", ++count);
+      {
+        //++count; 
+        //if (count % 100 == 0)
+        //  Console.WriteLine("Loop #: {0}", count);
 
         if (_grid.CurrentPanel.Color == Colors.Black)
           _executor.InputQueue.Enqueue((long)0);

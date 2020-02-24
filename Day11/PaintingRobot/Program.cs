@@ -8,10 +8,17 @@ namespace PaintingRobot
     static void Main()
     {
       string path = "input.txt";
-      Robot robot = new Robot(LoadInput(path), 2500);
+      Robot robot = new Robot(LoadInput(path), 2450);
       robot.Go();
-      Console.WriteLine(robot.Grid.PaintedPanels); 
+      Console.WriteLine("\nPart I: Panels painted at least once: {0}\n\n", robot.Grid.PaintedPanels);
+
+      /************** Part II *************/
+      robot.Grid.Initialize();
+      robot.Grid.CurrentPanel.Color = Colors.White;
+      robot.Go();
+      robot.Grid.Draw();      
     }
+
     private static long[] LoadInput(string path)
     {
       StreamReader file = new StreamReader(path);
