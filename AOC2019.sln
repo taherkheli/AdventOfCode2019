@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCodeTest", "Lib\IntCodeT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntCode", "Lib\IntCode\IntCode.csproj", "{3FE954CF-7C78-4A06-AC48-0A2FC752DF3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N-BodyProblemTest", "Day12\N-BodyProblemTest\N-BodyProblemTest.csproj", "{8C795F34-8ACC-4007-BC01-4943EBDD0D8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +157,10 @@ Global
 		{3FE954CF-7C78-4A06-AC48-0A2FC752DF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FE954CF-7C78-4A06-AC48-0A2FC752DF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FE954CF-7C78-4A06-AC48-0A2FC752DF3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C795F34-8ACC-4007-BC01-4943EBDD0D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C795F34-8ACC-4007-BC01-4943EBDD0D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C795F34-8ACC-4007-BC01-4943EBDD0D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C795F34-8ACC-4007-BC01-4943EBDD0D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +186,7 @@ Global
 		{942A95D4-392A-4C76-AD9A-C5A9892B54C3} = {B3513908-0F08-4DAB-B441-F9378807FBB5}
 		{625F1F9D-EA9B-481A-9471-537024314EBC} = {0FBFD4EB-76FF-43F6-9A9E-211B7FF0D342}
 		{3FE954CF-7C78-4A06-AC48-0A2FC752DF3C} = {0FBFD4EB-76FF-43F6-9A9E-211B7FF0D342}
+		{8C795F34-8ACC-4007-BC01-4943EBDD0D8D} = {B3513908-0F08-4DAB-B441-F9378807FBB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B44EEDC6-F323-47D7-954E-BBEE9AE91813}
