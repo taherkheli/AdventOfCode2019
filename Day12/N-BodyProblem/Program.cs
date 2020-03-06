@@ -221,7 +221,7 @@ namespace N_BodyProblem
       Position[] result;
 
       var file = new StreamReader(path).ReadToEnd();
-      var lines = file.Split(new char[] { '\n' });
+      var lines = file.Split(Environment.NewLine);
       result = new Position[lines.Length];
 
       for (int i = 0; i < lines.Length; i++)
@@ -292,7 +292,7 @@ namespace N_BodyProblem
   //    Position[] result;
 
   //    var file = new StreamReader(path).ReadToEnd();
-  //    var lines = file.Split(new char[] { '\n' });
+  //    var lines = file.Split(Environment.NewLine);
   //    result = new Position[lines.Length];
 
   //    for (int i = 0; i < lines.Length; i++)
