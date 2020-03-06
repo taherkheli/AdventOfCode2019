@@ -1,6 +1,5 @@
 ﻿using IntCode;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace CarePackage
@@ -12,137 +11,121 @@ namespace CarePackage
       string path = "input.txt";
       Grid grid = new Grid();
       Executor executor = new Executor(LoadInput(path));
-      //executor.Execute();
+      executor.Execute();
 
-      //while(executor.OutputQueue.Count != 0)
-      //{
-      //  var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-      //  var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-      //  var tileId = (TileId)Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-      //  grid.Tiles.Add(new Tile(x, y, tileId));
-      //}
+      while (executor.OutputQueue.Count != 0)
+      {
+        var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var tileId = (TileId)Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        grid.Tiles.Add(new Tile(x, y, tileId));
+      }
 
-      //int count = 0;
+      int count = 0;
+      foreach (var tile in grid.Tiles)
+        if (tile.TileId == TileId.Block)
+          count++;
 
-      //foreach (var tile in grid.Tiles)
-      //  if (tile.TileId == TileId.Block)
-      //    count++;
+      Console.WriteLine("\nPart I: Block tiles on the screen: {0}", count);
 
-      //Console.WriteLine("\nPart I: Block tiles on the screen: {0}\n\n", count);
+      /*********************  Part II  *******************************/
 
-
-      /****************  PartII   *********************/
-
+      int score = -1;
+      int lastX = -1;
+      int lastY = -1;
       executor.Initialize();
       executor.Memory[0] = (long)2;
-
-      int highScore = 0;
-      int yPrev = -1;
-      int xPrev = -1;
-
-
-      TileId tileId = TileId.Unknown;
-
       executor.Execute();
 
       while (executor.AwaitingInput)
       {
-        //handle output
-        while (executor.OutputQueue.Count > 0)
-        {
-          var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-          var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-          var z = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-
-          if ((x == -1) && (y == 0))
-            highScore = z;
-          else
-          {
-            tileId = (TileId)z;
-            var index = grid.Tiles.FindIndex(t => ((t.X == x) && (t.Y == y)));
-
-            if (index == -1) //not found
-              grid.Tiles.Add(new Tile(x, y, tileId));
-            else  //update
-              grid.Tiles[index].TileId = tileId;
-          }
-        }
-
-        //handle input
+        score = HandleOutput(grid, executor, score);
         var ball = grid.Tiles.Find(t => t.TileId == TileId.Ball);
         var paddle = grid.Tiles.Find(t => t.TileId == TileId.HorizontalPaddle);
-
-        int count = 0;
-        foreach (var tile in grid.Tiles)
-          if (tile.TileId == TileId.Block)
-            count++;
-
-        Console.WriteLine("\nBall ({0},{1})", ball.X, ball.Y);
-        Console.WriteLine("Paddle ({0},{1})", paddle.X, paddle.Y);
-        Console.WriteLine("Remaining blocks ({0})", count);
-
-
-        if (ball.Y > yPrev)  //falling
+        var blocks = grid.Tiles.FindAll(t => t.TileId == TileId.Block);
+        var joystick = Joystick.Unknown;
+        var dir = GetDirection(lastX, lastY, ball);
+        switch (dir)
         {
-          List<Position> trajectory = new List<Position>();
-          int num = paddle.Y - ball.Y;
-          for (int i = 0; i < num; i++)
-          {
-            if (ball.X > xPrev)
-              trajectory.Add(new Position(ball.X + (i + 1), ball.Y + (i + 1)));
+          case Direction.Q1:
+            if (ball.X <= paddle.X)
+              joystick = Joystick.Neutral;
             else
-              trajectory.Add(new Position(ball.X - (i + 1), ball.Y + (i + 1)));
-          }
-
-          bool losBlocked = false;
-          foreach (var position in trajectory)
-          {
-            var tile = grid.Tiles.Find(t => ((t.X == position.X) && (t.Y == position.Y)));
-
-            if ((tile != null) && (tile.TileId == TileId.Wall))
-            {
-              losBlocked = true;
-              break;
-            }
-          }
-
-          if (losBlocked == false)
-          {
-            // do something
-            //place paddel in one go on the trajectorydsafqwae
-
-
-            int diff = paddle.X - trajectory[trajectory.Count - 1].X;
-
-            if (diff == 0)
-            {
-              executor.InputQueue.Enqueue((long)0);
-            }
-
-            else if (diff > 0)
-            {
-              //for (int i = 0; i < diff; i++)
-              //  executor.InputQueue.Enqueue((long)-1);   // move left as per diff          
-
-              executor.InputQueue.Enqueue((long)-2);
-            }
-
-            else if ( diff < 0)
-            {
-              diff = Math.Abs(diff);
-              for (int i = 0; i < diff; i++)
-                executor.InputQueue.Enqueue((long)1);   // move right as per diff
-            }
-          }
+              joystick = Joystick.Right;
+            break;
+          case Direction.Q2:
+            if (ball.X <= paddle.X)
+              joystick = Joystick.Neutral;
+            else
+              joystick = Joystick.Right;
+            break;
+          case Direction.Q3:
+            if (ball.X >= paddle.X)
+              joystick = Joystick.Neutral;
+            else
+              joystick = Joystick.Left;
+            break;
+          case Direction.Q4:
+            if (ball.X >= paddle.X)
+              joystick = Joystick.Neutral;
+            else
+              joystick = Joystick.Left;
+            break;
         }
-        else
-          executor.InputQueue.Enqueue((long)0);
-
-        yPrev = ball.Y;
-        xPrev = ball.X;
+        executor.InputQueue.Enqueue(Convert.ToInt64(joystick));
+        lastX = ball.X;
+        lastY = ball.Y;
         executor.ResumeExecution();
-
       }
+
+      score = HandleOutput(grid, executor, score);
+      Console.WriteLine("\nPart II: Score after breaking all blocks: {0}\n\n\n", score);
+    }
+
+    private static int HandleOutput(Grid grid, Executor executor, int highScore)
+    {
+      while (executor.OutputQueue.Count != 0)
+      {
+        var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var tileId = TileId.Unknown;
+        int index = -1;
+
+        if ((x == -1) && (y == 0))
+          highScore = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        else
+          tileId = (TileId)Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+
+        index = grid.Tiles.FindIndex(t => (t.X == x) && (t.Y == y));
+        if (index == -1)
+          grid.Tiles.Add(new Tile(x, y, tileId));
+        else
+          grid.Tiles[index].TileId = tileId;
+      }
+
+      return highScore;
+    }
+
+    private static Direction GetDirection(int lastX, int lastY, Tile ball)
+    {
+      var dir = Direction.Unknown;
+
+      if (ball.X > lastX) //Q1 or Q2
+      {
+        if (ball.Y > lastY)
+          dir = Direction.Q2;
+        else
+          dir = Direction.Q1;
+      }
+      else //Q3 or Q 4
+      {
+        if (ball.Y < lastY)
+          dir = Direction.Q4;
+        else
+          dir = Direction.Q3;
+      }
+
+      return dir;
     }
 
     private static long[] LoadInput(string path)
