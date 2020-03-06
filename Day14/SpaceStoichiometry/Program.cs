@@ -5,7 +5,7 @@ namespace SpaceStoichiometry
 {
   class Program
   {
-    static void Main(string[] args)
+    static void Main()
     {
 
       //https://stackoverflow.com/questions/769/solving-a-linear-equation

@@ -29,74 +29,74 @@ namespace FeedbackAmplifiers
     {
       Executor amp1 = new Executor(program);
       amp1.InputQueue.Enqueue(pattern[0]);
-      amp1.InputQueue.Enqueue((long)0);
+      amp1.InputQueue.Enqueue(0);
       amp1.Execute();
 
       Executor amp2 = new Executor(program);
       amp2.InputQueue.Enqueue(pattern[1]);
-      amp2.InputQueue.Enqueue((long)amp1.OutputQueue.Dequeue());
+      amp2.InputQueue.Enqueue(amp1.OutputQueue.Dequeue());
       amp2.Execute();
 
       Executor amp3 = new Executor(program);
       amp3.InputQueue.Enqueue(pattern[2]);
-      amp3.InputQueue.Enqueue((long)amp2.OutputQueue.Dequeue());
+      amp3.InputQueue.Enqueue(amp2.OutputQueue.Dequeue());
       amp3.Execute();
 
       Executor amp4 = new Executor(program);
       amp4.InputQueue.Enqueue(pattern[3]);
-      amp4.InputQueue.Enqueue((long)amp3.OutputQueue.Dequeue());
+      amp4.InputQueue.Enqueue(amp3.OutputQueue.Dequeue());
       amp4.Execute();
 
       Executor amp5 = new Executor(program);
       amp5.InputQueue.Enqueue(pattern[4]);
-      amp5.InputQueue.Enqueue((long)amp4.OutputQueue.Dequeue());
+      amp5.InputQueue.Enqueue(amp4.OutputQueue.Dequeue());
       amp5.Execute();
 
-      return (long)amp5.OutputQueue.Dequeue();
+      return amp5.OutputQueue.Dequeue();
     }
        
     private static long CalculateFeedbackTopology(long[] input, long[] pattern)
     {
       Executor amp1 = new Executor(input);
       amp1.InputQueue.Enqueue(pattern[0]);
-      amp1.InputQueue.Enqueue((long)0);
+      amp1.InputQueue.Enqueue(0);
       amp1.Execute();
 
       Executor amp2 = new Executor(input);
       amp2.InputQueue.Enqueue(pattern[1]);
-      amp2.InputQueue.Enqueue((long)amp1.OutputQueue.Dequeue());
+      amp2.InputQueue.Enqueue(amp1.OutputQueue.Dequeue());
       amp2.Execute();
 
       Executor amp3 = new Executor(input);
       amp3.InputQueue.Enqueue(pattern[2]);
-      amp3.InputQueue.Enqueue((long)amp2.OutputQueue.Dequeue());
+      amp3.InputQueue.Enqueue(amp2.OutputQueue.Dequeue());
       amp3.Execute();
 
       Executor amp4 = new Executor(input);
       amp4.InputQueue.Enqueue(pattern[3]);
-      amp4.InputQueue.Enqueue((long)amp3.OutputQueue.Dequeue());
+      amp4.InputQueue.Enqueue(amp3.OutputQueue.Dequeue());
       amp4.Execute();
 
       Executor amp5 = new Executor(input);
       amp5.InputQueue.Enqueue(pattern[4]);
-      amp5.InputQueue.Enqueue((long)amp4.OutputQueue.Dequeue());
+      amp5.InputQueue.Enqueue(amp4.OutputQueue.Dequeue());
       amp5.Execute();
 
       if (amp5.AwaitingInput == false)
-        return (long)amp5.OutputQueue.Dequeue();
+        return amp5.OutputQueue.Dequeue();
       else 
       {
         while (true)
         {
-          amp1.InputQueue.Enqueue((long)amp5.OutputQueue.Dequeue());
+          amp1.InputQueue.Enqueue(amp5.OutputQueue.Dequeue());
           amp1.ResumeExecution();
-          amp2.InputQueue.Enqueue((long)amp1.OutputQueue.Dequeue());
+          amp2.InputQueue.Enqueue(amp1.OutputQueue.Dequeue());
           amp2.ResumeExecution();
-          amp3.InputQueue.Enqueue((long)amp2.OutputQueue.Dequeue());
+          amp3.InputQueue.Enqueue(amp2.OutputQueue.Dequeue());
           amp3.ResumeExecution();
-          amp4.InputQueue.Enqueue((long)amp3.OutputQueue.Dequeue());
+          amp4.InputQueue.Enqueue(amp3.OutputQueue.Dequeue());
           amp4.ResumeExecution();
-          amp5.InputQueue.Enqueue((long)amp4.OutputQueue.Dequeue());
+          amp5.InputQueue.Enqueue(amp4.OutputQueue.Dequeue());
           amp5.ResumeExecution();
 
           if (!amp5.AwaitingInput)
@@ -104,7 +104,7 @@ namespace FeedbackAmplifiers
         }
       }
 
-      return (long)amp5.OutputQueue.Dequeue();
+      return amp5.OutputQueue.Dequeue();
     }
   }
 }

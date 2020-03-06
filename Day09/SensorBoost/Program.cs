@@ -10,15 +10,15 @@ namespace Day09
     {
       string path = "input.txt";
       Executor executor = new Executor(LoadInput(path));
-      executor.InputQueue.Enqueue((long)1);
+      executor.InputQueue.Enqueue(1);
       executor.Execute();
-      Console.WriteLine("\nPart I :  {0}", (long)executor.OutputQueue.Dequeue());
+      Console.WriteLine("\nPart I :  {0}", executor.OutputQueue.Dequeue());
 
       //reload intcode
       executor = new Executor(LoadInput(path));
-      executor.InputQueue.Enqueue((long)2);
+      executor.InputQueue.Enqueue(2);
       executor.Execute();
-      Console.WriteLine("\nPart II :  {0}", (long)executor.OutputQueue.Dequeue());
+      Console.WriteLine("\nPart II :  {0}", executor.OutputQueue.Dequeue());
     }
 
     private static long[] LoadInput(string path)

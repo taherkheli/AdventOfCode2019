@@ -34,17 +34,17 @@ namespace PaintingRobot
         //  Console.WriteLine("Loop #: {0}", count);
 
         if (_grid.CurrentPanel.Color == Colors.Black)
-          _executor.InputQueue.Enqueue((long)0);
+          _executor.InputQueue.Enqueue(0);
         else  //White 
-          _executor.InputQueue.Enqueue((long)1);
+          _executor.InputQueue.Enqueue(1);
 
         if (_executor.AwaitingInput)
           _executor.ResumeExecution();
         else
           _executor.Execute();
 
-        out1 = (long)_executor.OutputQueue.Dequeue();
-        out2 = (long)_executor.OutputQueue.Dequeue();
+        out1 = _executor.OutputQueue.Dequeue();
+        out2 = _executor.OutputQueue.Dequeue();
 
         if (_executor.AwaitingInput == true)  //intCode has not exited yet 
         {

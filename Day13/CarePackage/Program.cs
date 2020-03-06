@@ -15,9 +15,9 @@ namespace CarePackage
 
       while (executor.OutputQueue.Count != 0)
       {
-        var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-        var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-        var tileId = (TileId)Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var x = Convert.ToInt32(executor.OutputQueue.Dequeue());
+        var y = Convert.ToInt32(executor.OutputQueue.Dequeue());
+        var tileId = (TileId)Convert.ToInt32(executor.OutputQueue.Dequeue());
         grid.Tiles.Add(new Tile(x, y, tileId));
       }
 
@@ -34,7 +34,7 @@ namespace CarePackage
       int lastX = -1;
       int lastY = -1;
       executor.Initialize();
-      executor.Memory[0] = (long)2;
+      executor.Memory[0] = 2;
       executor.Execute();
 
       while (executor.AwaitingInput)
@@ -86,15 +86,15 @@ namespace CarePackage
     {
       while (executor.OutputQueue.Count != 0)
       {
-        var x = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
-        var y = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+        var x = Convert.ToInt32(executor.OutputQueue.Dequeue());
+        var y = Convert.ToInt32(executor.OutputQueue.Dequeue());
         var tileId = TileId.Unknown;
         int index = -1;
 
         if ((x == -1) && (y == 0))
-          highScore = Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+          highScore = Convert.ToInt32(executor.OutputQueue.Dequeue());
         else
-          tileId = (TileId)Convert.ToInt32((long)executor.OutputQueue.Dequeue());
+          tileId = (TileId)Convert.ToInt32(executor.OutputQueue.Dequeue());
 
         index = grid.Tiles.FindIndex(t => (t.X == x) && (t.Y == y));
         if (index == -1)

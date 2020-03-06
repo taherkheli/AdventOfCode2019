@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IntCode
@@ -11,13 +12,13 @@ namespace IntCode
     private long _relBase;                  //relative base for supporting relative mode parameters
     private readonly long _intCodeLen;
     private long[] _memory;
-    private Queue _inputQueue;
-    private Queue _outputQueue;
+    private Queue<long> _inputQueue;
+    private Queue<long> _outputQueue;
     private bool _awaitingInput;
 
-    public Queue InputQueue { get => _inputQueue; set => _inputQueue = value; }
+    public Queue<long> InputQueue { get => _inputQueue; set => _inputQueue = value; }
 
-    public Queue OutputQueue { get => _outputQueue; set => _outputQueue = value; }
+    public Queue<long> OutputQueue { get => _outputQueue; set => _outputQueue = value; }
 
     public bool AwaitingInput => _awaitingInput;
 
@@ -32,8 +33,8 @@ namespace IntCode
       _intCode = intCode;
       _relBase = 0;
       _iPtr = 0;
-      _inputQueue = new Queue();
-      _outputQueue = new Queue();
+      _inputQueue = new Queue<long>();
+      _outputQueue = new Queue<long>();
       _awaitingInput = false;
     }
 
@@ -148,7 +149,7 @@ namespace IntCode
     {
       if (_inputQueue.Count != 0)
       {
-        var value = (long)_inputQueue.Dequeue();
+        var value = _inputQueue.Dequeue();
 
         if (i.p1ParamMode == ParamMode.Reference)
           _memory[_memory[_iPtr + 1]] = value;
