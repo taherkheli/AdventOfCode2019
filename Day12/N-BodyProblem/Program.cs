@@ -5,6 +5,8 @@ using System.Linq;
 
 namespace N_BodyProblem
 {
+
+
   class Program
   {
     static void Main()
@@ -37,11 +39,11 @@ namespace N_BodyProblem
       //int xMatched = -1;
       //int yMatched = -1;
       //int zMatched = -1;
-      
+
 
       long count = 0;
 
-      while(true)
+      while (true)
       {
         Console.WriteLine("step# {0}", ++count);
 
@@ -71,22 +73,22 @@ namespace N_BodyProblem
 
         //xMatched = RepeatedX(vectorX, SnapshotsX);
 
-          //if (xMatched > -1)
-          //  yMatched = RepeatedY(vectorY, SnapshotsY);
+        //if (xMatched > -1)
+        //  yMatched = RepeatedY(vectorY, SnapshotsY);
 
 
-          //if (yMatched > -1)
-          //  zMatched = RepeatedZ(vectorZ, SnapshotsZ);
+        //if (yMatched > -1)
+        //  zMatched = RepeatedZ(vectorZ, SnapshotsZ);
 
 
-          //if ((xMatched > -1) && (yMatched > -1) && (zMatched > -1) && (xMatched == yMatched) && (yMatched == zMatched))
-          //  break;
-          //else
-          //{
-          //  SnapshotsX.Add(vectorX);
-          //  SnapshotsY.Add(vectorY);
-          //  SnapshotsZ.Add(vectorZ);
-          //}
+        //if ((xMatched > -1) && (yMatched > -1) && (zMatched > -1) && (xMatched == yMatched) && (yMatched == zMatched))
+        //  break;
+        //else
+        //{
+        //  SnapshotsX.Add(vectorX);
+        //  SnapshotsY.Add(vectorY);
+        //  SnapshotsZ.Add(vectorZ);
+        //}
 
       }
 
@@ -255,11 +257,11 @@ namespace N_BodyProblem
   //  {
   //    int timeSteps = 1001;
   //    string path = "input.txt";
-  //    Position[] positions = LoadInput(path); 
+  //    Position[] positions = LoadInput(path);
   //    Moon[] moons = new Moon[positions.Length];
 
   //    for (int i = 0; i < moons.Length; i++)
-  //      moons[i]= new Moon() { Position = positions[i] } ;
+  //      moons[i] = new Moon() { Position = positions[i] };
 
   //    for (int i = 0; i < timeSteps; i++)
   //    {
@@ -273,11 +275,20 @@ namespace N_BodyProblem
   //      //update velocity of each moon
   //      for (int j = 0; j < moons.Length; j++)
   //        for (int k = 0; k < moons.Length; k++)
-  //          moons[j].ApplyGravity(moons[k]);
+  //        {
+  //          moons[j].ApplyGravityX(moons[k].Position.X);
+  //          moons[j].ApplyGravityY(moons[k].Position.Y);
+  //          moons[j].ApplyGravityZ(moons[k].Position.Z);
+  //        }
+
 
   //      //update position of each moon as per new velocity
   //      for (int k = 0; k < moons.Length; k++)
-  //        moons[k].ApplyVelocity();
+  //      {
+  //        moons[k].ApplyVelocityX();
+  //        moons[k].ApplyVelocityY();
+  //        moons[k].ApplyVelocityZ();
+  //      }
   //    }
 
   //    int totalEnergy = 0;
@@ -308,7 +319,7 @@ namespace N_BodyProblem
   //    var x = Int32.Parse(s[start..end]);
 
   //    start = s.IndexOf('y') + 2;
-  //    end = s.IndexOf(',', end +1);
+  //    end = s.IndexOf(',', end + 1);
   //    int y = Int32.Parse(s[start..end]);
 
   //    start = (s.IndexOf('z')) + 2;
