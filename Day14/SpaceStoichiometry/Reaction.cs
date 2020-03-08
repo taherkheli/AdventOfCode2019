@@ -17,6 +17,7 @@ namespace SpaceStoichiometry
 
     public Reaction()
     {
+      _inputs = new List<Chemical>();
 
     }
   }
