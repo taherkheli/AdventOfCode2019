@@ -34,9 +34,48 @@ namespace N_BodyProblem
         _velocity.Z--;
     }
 
+    public void ApplyGravityX(int x)
+    {
+      if (_position.X < x)
+        _velocity.X++;
+      else if (_position.X > x)
+        _velocity.X--;      
+    }
+
+    public void ApplyGravityY(int y)
+    {
+      if (_position.Y < y)
+        _velocity.Y++;
+      else if (_position.Y > y)
+        _velocity.Y--;
+    }
+
+    public void ApplyGravityZ(int z)
+    {
+      if (_position.Z < z)
+        _velocity.Z++;
+      else if (_position.Z > z)
+        _velocity.Z--;
+    }
+
     public void ApplyVelocity() 
     {
       _position = new Position(_position.X + _velocity.X, _position.Y + _velocity.Y, _position.Z + _velocity.Z);
+    }
+
+    public void ApplyVelocityX()
+    {
+      _position.X = _position.X + _velocity.X;
+    }
+
+    public void ApplyVelocityY()
+    {
+      _position.Y = _position.Y + _velocity.Y;
+    }
+
+    public void ApplyVelocityZ()
+    {
+      _position.Z = _position.Z + _velocity.Z;
     }
 
     public int GetTotalEnergy()
