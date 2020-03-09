@@ -12,6 +12,7 @@ namespace AsteroidDetection
       string path = "input.txt";
       var lines = File.ReadAllLines(path).ToList<string>();
       var grid = new Grid(lines);
+      int answer2 = 0;
 
       var highest = 0;
       Asteroid actualAsteroid = null;
@@ -39,14 +40,16 @@ namespace AsteroidDetection
 
       while (grid.Asteroids.Count > 1) //all except the monitoring station
       {
-        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ1(center));    
-        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ2(center));
-        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ3(center));
-        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ4(center));
+        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ1(center), ref answer2);    
+        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ2(center), ref answer2);
+        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ3(center), ref answer2);
+        vaporizedCount = Vaporize(grid, center, vaporizedCount, grid.GetPointsListQ4(center), ref answer2);
       }
+
+      Console.WriteLine("\nPartII:  Answer : {0}", answer2);
     }
 
-    private static int Vaporize(Grid grid, Point center, int vaporizedCount, List<Point> pointsOfInterest)
+    private static int Vaporize(Grid grid, Point center, int vaporizedCount, List<Point> pointsOfInterest, ref int result)
     {
       foreach (var p in pointsOfInterest)
       {
@@ -61,6 +64,10 @@ namespace AsteroidDetection
             vaporizedCount++;
             grid.Asteroids.Remove(asteroid);
             Console.WriteLine("Asteroid #{0} to be vaporized is at ({1},{2})", vaporizedCount, asteroid.Position.X, asteroid.Position.Y);
+
+            if (vaporizedCount == 200)
+              result = 100* asteroid.Position.X + asteroid.Position.Y;
+            
             break;
           }
         }
