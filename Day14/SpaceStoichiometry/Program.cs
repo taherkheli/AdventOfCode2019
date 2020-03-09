@@ -7,11 +7,17 @@ namespace SpaceStoichiometry
   {
     static void Main()
     {
-
-      //https://stackoverflow.com/questions/769/solving-a-linear-equation
-
       string path = "input.txt";      
-      var x = Parser.GetReactions(LoadInput(path));
+      var reactions = Parser.GetReactions(LoadInput(path));
+      var reaction = reactions.Find(r => r.Output.Name == "FUEL");
+      if (reaction != null)
+        reactions.Remove(reaction);
+
+      reaction.Substitute(reactions);
+
+
+
+
 
     }
 

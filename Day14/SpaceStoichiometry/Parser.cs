@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceStoichiometry
 {
@@ -17,62 +15,30 @@ namespace SpaceStoichiometry
       return result;
     }
 
-
     private static Reaction ParseIt(string s)
     {
-      Reaction result;
+      Reaction result = new Reaction();
 
-      var x = s.Split(" => ");
+      var step1 = s.Split(" => ");
 
-      for (int i = 0; i < x.Length; i++)
-        x[i] = x[i].Trim();
+      for (int i = 0; i < step1.Length; i++)
+        step1[i] = step1[i].Trim();
 
-      //parse output
-      var output = x[x.Length - 1];
-      var z = output.Split(' ');
-      
-      var mutipleOut = Int32.Parse(z[0]);
-      
-      result = new Reaction();
+      //parse RHS
+      var step2 = (step1[step1.Length - 1]).Split(' ');
+      result.Output = new Chemical(step2[1], Int32.Parse(step2[0]));    
 
-      result.Output = new Chemical(z[1]);
-      
+      //parse LHS
+      var step3 = step1[0].Split(", ");
 
-      //parse input
-      var input = x[0];
+      for (int i = 0; i < step3.Length; i++)
+        step3[i] = step3[i].Trim();            
 
-      var zArray = input.Split(", ");
-      for (int i = 0; i < zArray.Length; i++)
-        zArray[i] = zArray[i].Trim();
-            
-      List<int> multiples =  new List<int>();
-
-      for (int i = 0; i < zArray.Length; i++)
+      for (int i = 0; i < step3.Length; i++)
       {
-        var t = zArray[i].Split(" ");
-        result.Inputs.Add(new Chemical(t[1]));
-        multiples.Add(Int32.Parse(t[0]));
-
+        var temp = step3[i].Split(' ');
+        result.Inputs.Add(new Chemical(temp[1], Int32.Parse(temp[0])));
       }
-
-      multiples.Add(mutipleOut);
-
-      result.Formula = multiples.ToArray();
-
-
-      //var start = s.IndexOf(('x') + 2;
-      //var end = s.IndexOf(',');
-      //var x = Int32.Parse(s[start..end]);
-
-      //start = s.IndexOf('y') + 2;
-      //end = s.IndexOf(',', end + 1);
-      //int y = Int32.Parse(s[start..end]);
-
-      //start = (s.IndexOf('z')) + 2;
-      //end = (s.IndexOf('>', end + 1));
-      //int z = Int32.Parse(s[start..end]);
-
-      //return new Position(x, y, z);
 
       return result;
     }
