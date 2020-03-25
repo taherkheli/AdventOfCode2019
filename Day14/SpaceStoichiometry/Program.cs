@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace SpaceStoichiometry
 {
@@ -7,18 +9,13 @@ namespace SpaceStoichiometry
   {
     static void Main()
     {
-      string path = "input.txt";      
+      string path = "input.txt";
       var reactions = Parser.GetReactions(LoadInput(path));
       var reaction = reactions.Find(r => r.Output.Name == "FUEL");
       if (reaction != null)
         reactions.Remove(reaction);
-
-      reaction.Substitute(reactions);
-
-
-
-
-
+      
+      Console.WriteLine("ORE needed: {0}", reaction.CalculateNeededOre(reactions));
     }
 
 
@@ -28,9 +25,5 @@ namespace SpaceStoichiometry
       var lines = file.Split(Environment.NewLine);
       return lines;
     }
-
-
-
-
   }
 }

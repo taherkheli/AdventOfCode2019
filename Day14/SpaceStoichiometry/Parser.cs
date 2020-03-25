@@ -10,12 +10,12 @@ namespace SpaceStoichiometry
       var result = new List<Reaction> { };
 
       for (int i = 0; i < strings.Length; i++)
-        result.Add(ParseIt(strings[i]));  
+        result.Add(Parse(strings[i]));  
 
       return result;
     }
 
-    private static Reaction ParseIt(string s)
+    private static Reaction Parse(string s)
     {
       Reaction result = new Reaction();
 

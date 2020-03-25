@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceStoichiometry
 {
@@ -16,79 +15,113 @@ namespace SpaceStoichiometry
     {
       _inputs = new List<Chemical>();
     }
-
-    public Reaction Substitute(List<Reaction> reactions)
+    
+    public int CalculateNeededOre(List<Reaction> reactions)
     {
-      List<int> IndicesToRemove = new List<int>();
-      List<int> IndicesToReplace = new List<int>();
 
-      while (true)
+      Reaction reaction = null;
+      bool done = false;
+
+      while (!done)
       {
-        foreach (var chemical in this.Inputs)    //for every input chemical of THIS reaction
+
+        //find a candidate for substitution 
+        for (int i = 0; i < this.Inputs.Count; i++)
         {
-          var index = reactions.FindIndex(r => r.Output.Name == chemical.Name);    //look for a recipe reaction
+          reaction = reactions.Find(r => r.Output.Name == this.Inputs[i].Name);    //look for a recipe reaction
 
-          if (index != -1)   //if found
+          if (reaction == null)
+            throw new Exception("Something went wrong!");
+          else
           {
-            var r = reactions[index];
-
-            if (r.Inputs.Count > 1)   //not ORE ... 1 input = ORE = simplified already
+            if (reaction.Inputs.Count > 1)   //not ORE ... 1 input = ORE = simplified already            
+              break;
+            else     //assuming 1 input is always ORE = simplified
             {
-              IndicesToRemove.Add(index);
-              IndicesToReplace.Add(index);
+              reaction = null;
+              continue;
             }
           }
         }
 
-        //REPLACE
+        if (reaction != null)    //a substitution is still needed
+          this.Substitute(reaction);
+        else
+          done = true;
+      }
+      
+      return CalculateOre(reactions);
+    }
 
-        //int needed = chemical.Multiple;
-        //int recipeOffers = r.Output.Multiple;
+    //now just ORE subsitution remains
+    private int CalculateOre(List<Reaction> reactions)
+    {
+      Reaction reaction = null;
+      int result = 0;
 
-        ////Find LCM/Common ground
+      foreach (var item in this.Inputs)
+      {
+        reaction = reactions.Find(r => r.Output.Name == item.Name);    //look for a recipe reaction
 
-        ////add
-        //foreach (var item in r.Inputs)
-        //{
-        //  var existingIndex = this.Inputs.FindIndex(i => i.Name == item.Name);    //check if it exists in inputs already
-
-        //  if (existingIndex != -1)   //if it does, just add multiples              
-        //    this.Inputs[existingIndex].Multiple += item.Multiple;
-        //  else
-        //    this.Inputs.Add(item);
-        //}
-
-
-
-
-
-
-        //prepare for next iteration by removing all items in indicesToRemove
-        for (int i = 0; i < IndicesToRemove.Count; i++)
-          reactions.RemoveAt(i);
-
-        //reset
-        IndicesToRemove = new List<int>();
-        IndicesToReplace = new List<int>();
-
-
-        int count = 0;
-        
-        foreach (var r in reactions)
+        if (reaction == null)
+          throw new Exception("Something went wrong!");
+        else
         {
-          if (r.Inputs.Count > 1)
-            count++;
+          decimal d = reaction.Output.Multiple;
+          decimal factor = Math.Ceiling(item.Multiple / d);
+          result += (reaction.Inputs[0].Multiple * (int)factor);
         }
-
-        if (count == 0)     // all reactions are reduded to just 1 input
-          break;
       }
 
+      return result;
+    }
 
+    private void Substitute(Reaction r)
+    {
+      var chemical = this.Inputs.Find(c => c.Name == r.Output.Name);
 
-      //now count ORES and return
+      if (chemical == null)
+        throw new ArgumentException("{0} was not found among input chemicals", r.Output.Name);
 
-      return null;
+      int lcm = GetLCM(chemical.Multiple, r.Output.Multiple);
+      int f_r = lcm / r.Output.Multiple;
+      int f_this = lcm /chemical.Multiple;
+
+      r.Output.Multiple *= f_r;
+      foreach (var i in r.Inputs)
+        i.Multiple *= f_r;
+
+      this.Output.Multiple *= f_this;
+      foreach (var i in this.Inputs)
+        i.Multiple *= f_this;
+
+      this.Inputs.Remove(chemical);
+
+      foreach (var item in r.Inputs)
+      {
+        var temp = this.Inputs.Find(c => c.Name == item.Name);
+
+        if (temp == null)
+          this.Inputs.Add(item);
+        else
+          temp.Multiple += item.Multiple;
+      }
+    }
+    
+    private int GetLCM(int num1, int num2)
+    {
+      int x = num1;
+      int y = num2;
+
+      while (num1 != num2)
+      {
+        if (num1 > num2)
+          num1 -= num2;
+        else
+          num2 -= num1;
+      }
+
+      return (x * y) / num1;
     }
   }
 }
