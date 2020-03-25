@@ -49,11 +49,11 @@ namespace SpaceStoichiometry
         else
           done = true;
       }
-      
+
+      //now just ORE subsitution remains      
       return CalculateOre(reactions);
     }
 
-    //now just ORE subsitution remains
     private int CalculateOre(List<Reaction> reactions)
     {
       Reaction reaction = null;
@@ -83,17 +83,16 @@ namespace SpaceStoichiometry
       if (chemical == null)
         throw new ArgumentException("{0} was not found among input chemicals", r.Output.Name);
 
-      int lcm = GetLCM(chemical.Multiple, r.Output.Multiple);
-      int f_r = lcm / r.Output.Multiple;
-      int f_this = lcm /chemical.Multiple;
 
-      r.Output.Multiple *= f_r;
-      foreach (var i in r.Inputs)
-        i.Multiple *= f_r;
+      if (chemical.Multiple > r.Output.Multiple)
+      {
+        decimal d = chemical.Multiple;
+        int factor = (int)Math.Ceiling(d/r.Output.Multiple);
 
-      this.Output.Multiple *= f_this;
-      foreach (var i in this.Inputs)
-        i.Multiple *= f_this;
+        r.Output.Multiple *= factor;
+        foreach (var i in r.Inputs)
+          i.Multiple *= factor;
+      }
 
       this.Inputs.Remove(chemical);
 
@@ -107,21 +106,53 @@ namespace SpaceStoichiometry
           temp.Multiple += item.Multiple;
       }
     }
+
+    //private void Substitute(Reaction r)
+    //{
+    //  var chemical = this.Inputs.Find(c => c.Name == r.Output.Name);
+
+    //  if (chemical == null)
+    //    throw new ArgumentException("{0} was not found among input chemicals", r.Output.Name);
+
+    //  int lcm = GetLCM(chemical.Multiple, r.Output.Multiple);
+    //  int f_r = lcm / r.Output.Multiple;
+    //  int f_this = lcm /chemical.Multiple;
+
+    //  r.Output.Multiple *= f_r;
+    //  foreach (var i in r.Inputs)
+    //    i.Multiple *= f_r;
+
+    //  this.Output.Multiple *= f_this;
+    //  foreach (var i in this.Inputs)
+    //    i.Multiple *= f_this;
+
+    //  this.Inputs.Remove(chemical);
+
+    //  foreach (var item in r.Inputs)
+    //  {
+    //    var temp = this.Inputs.Find(c => c.Name == item.Name);
+
+    //    if (temp == null)
+    //      this.Inputs.Add(item);
+    //    else
+    //      temp.Multiple += item.Multiple;
+    //  }
+    //}
     
-    private int GetLCM(int num1, int num2)
-    {
-      int x = num1;
-      int y = num2;
+    //private int GetLCM(int num1, int num2)
+    //{
+    //  int x = num1;
+    //  int y = num2;
 
-      while (num1 != num2)
-      {
-        if (num1 > num2)
-          num1 -= num2;
-        else
-          num2 -= num1;
-      }
+    //  while (num1 != num2)
+    //  {
+    //    if (num1 > num2)
+    //      num1 -= num2;
+    //    else
+    //      num2 -= num1;
+    //  }
 
-      return (x * y) / num1;
-    }
+    //  return (x * y) / num1;
+    //}
   }
 }
