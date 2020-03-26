@@ -36,7 +36,9 @@ namespace SpaceStoichiometry
           {
             if (reaction.Inputs.Count > 1)   //not ORE ... 1 input = ORE = simplified already            
               break;
-            else     //assuming 1 input is always ORE = simplified
+            else if (reaction.Inputs[0].Name != "ORE")
+              break;
+            else     //1 input with Name=ORE => simplified already
             {
               reaction = null;
               continue;
@@ -78,25 +80,26 @@ namespace SpaceStoichiometry
 
     private void Substitute(Reaction r)
     {
+      var rCopy = r.GetCopy();          //DO NOT modify r. Create a copy!
       var chemical = this.Inputs.Find(c => c.Name == r.Output.Name);
 
       if (chemical == null)
         throw new ArgumentException("{0} was not found among input chemicals", r.Output.Name);
 
-
       if (chemical.Multiple > r.Output.Multiple)
       {
         decimal d = chemical.Multiple;
-        int factor = (int)Math.Ceiling(d/r.Output.Multiple);
+        int factor = (int)Math.Ceiling(d / r.Output.Multiple);
 
-        r.Output.Multiple *= factor;
-        foreach (var i in r.Inputs)
+        foreach (var i in rCopy.Inputs)
           i.Multiple *= factor;
-      }
 
+        rCopy.Output.Multiple *= factor;
+      }
+           
       this.Inputs.Remove(chemical);
 
-      foreach (var item in r.Inputs)
+      foreach (var item in rCopy.Inputs)
       {
         var temp = this.Inputs.Find(c => c.Name == item.Name);
 
@@ -138,7 +141,7 @@ namespace SpaceStoichiometry
     //      temp.Multiple += item.Multiple;
     //  }
     //}
-    
+
     //private int GetLCM(int num1, int num2)
     //{
     //  int x = num1;
@@ -154,5 +157,20 @@ namespace SpaceStoichiometry
 
     //  return (x * y) / num1;
     //}
+
+    private Reaction GetCopy()
+    {
+      Reaction result = new Reaction();
+
+      foreach (var item in this.Inputs)
+      {
+        var c = new Chemical(item.Name, item.Multiple);
+        result.Inputs.Add(c);
+      }
+
+      result.Output = new Chemical(this.Output.Name, this.Output.Multiple);
+
+      return result;
+    }
   }
 }
