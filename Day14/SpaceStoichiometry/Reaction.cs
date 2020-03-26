@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpaceStoichiometry
 {
@@ -15,19 +16,19 @@ namespace SpaceStoichiometry
     {
       _inputs = new List<Chemical>();
     }
-    
+
     public int CalculateNeededOre(List<Reaction> reactions)
     {
+      reactions = FixOrdering(reactions);
 
       Reaction reaction = null;
       bool done = false;
 
       while (!done)
       {
-
-        //find a candidate for substitution 
         for (int i = 0; i < this.Inputs.Count; i++)
         {
+          //get next substitution candidate
           reaction = reactions.Find(r => r.Output.Name == this.Inputs[i].Name);    //look for a recipe reaction
 
           if (reaction == null)
@@ -54,6 +55,43 @@ namespace SpaceStoichiometry
 
       //now just ORE subsitution remains      
       return CalculateOre(reactions);
+    }
+
+    private List<Reaction> FixOrdering(List<Reaction> reactions)
+    {
+      reactions = (reactions.OrderByDescending(r => r.Inputs.Count)).ToList();
+
+      for (int i = 0; i < reactions.Count; i++)
+      {
+        var name = reactions[i].Output.Name;
+
+        for (int j = i + 1; j < reactions.Count; j++)     
+        {
+          if (-1 != reactions[j].Inputs.FindIndex(c => c.Name == name))
+          {
+            var temp = reactions[j];
+            reactions.RemoveAt(j);
+            reactions.Insert(i, temp);      
+            i -= 1;
+            break;
+          }
+        }
+      }
+
+      //fix FUEL reaction ordering
+      var orderedInputs = new List<Chemical>();
+
+      for (int i = 0; i < reactions.Count; i++)
+      {
+        var temp = this.Inputs.Find(c => c.Name == reactions[i].Output.Name);
+
+        if (temp != null)
+          orderedInputs.Add(new Chemical(temp.Name, temp.Multiple));
+      }
+
+      this.Inputs = orderedInputs;
+
+      return reactions;
     }
 
     private int CalculateOre(List<Reaction> reactions)
@@ -96,7 +134,7 @@ namespace SpaceStoichiometry
 
         rCopy.Output.Multiple *= factor;
       }
-           
+
       this.Inputs.Remove(chemical);
 
       foreach (var item in rCopy.Inputs)
